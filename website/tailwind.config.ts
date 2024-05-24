@@ -10,6 +10,11 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      colors: {
+        primary: "#FFFFFF",
+        background: "#000000",
+        foreground: "#FFFFFF",
+      },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
         "gradient-conic":

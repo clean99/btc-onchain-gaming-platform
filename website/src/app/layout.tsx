@@ -3,6 +3,8 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import AddressButton from "@/components/profile";
 import {NextUIProvider} from "@nextui-org/react";
+import { Logo } from "@/components/logo";
+import Navigator from "@/components/navigator";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -19,10 +21,9 @@ export default function RootLayout({
   
   return (
     <html lang="en">
-      
       <body className={inter.className}>
       <NextUIProvider>
-        <AddressButton />
+        <Navigator />
         {children}
       </NextUIProvider>
       </body>

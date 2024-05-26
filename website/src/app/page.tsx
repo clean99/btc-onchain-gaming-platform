@@ -37,14 +37,14 @@ export default function Home() {
         <Cards />
         </div>
       </div>
-      <div className="flex flex-col items-start justify-start w-full h-screen bg-black p-72" style={{
+      <div className="flex flex-col items-start justify-start w-full h-screen bg-black p-16 sm:p-72" style={{
         backgroundImage: "url('/section3.svg')",
         backgroundSize: "cover",
         backgroundPosition: "top center",
         backgroundRepeat: "no-repeat",
       
       }}>
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-4 items-center">
           <h1 className="text-6xl font-bold text-white">
             LEADER BOARD
           </h1>

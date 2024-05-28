@@ -1,9 +1,6 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
 import "./globals.css";
-import AddressButton from "@/components/profile";
 import {NextUIProvider} from "@nextui-org/react";
-import { Logo } from "@/components/logo";
 import Navigator from "@/components/navigator";
 
 import localFont from 'next/font/local'

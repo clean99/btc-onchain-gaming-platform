@@ -10,7 +10,7 @@ export default function Page({ params }: { params: { gameId: string, variationId
 
   useEffect(() => {
     // Function to stop propagation of keyboard events on the parent page
-    const stopPropagation = (e) => {
+    const stopPropagation = (e: KeyboardEvent) => {
       e.stopPropagation();
     };
 
@@ -31,7 +31,9 @@ export default function Page({ params }: { params: { gameId: string, variationId
     // Focus the iframe to ensure it receives keyboard events
     const iframe = iframeRef.current;
     if (iframe) {
+        // @ts-ignore
       iframe.onload = () => {
+        // @ts-ignore
         iframe.contentWindow.focus();
       };
     }
@@ -39,6 +41,7 @@ export default function Page({ params }: { params: { gameId: string, variationId
 
     return (
         <div className="flex flex-col items-center w-full h-screen bg-black p-4 sm:p-12">
+        {/* @ts-ignore */}
             <iframe srcDoc={gameHtml} ref={iframeRef} className="w-full h-full border-white border-2 rounded-lg" />
             <div className="flex gap-12 items-center">
                 <Button size="lg" color="primary" variant="light" startContent={<Image src="/flash.svg" alt="game icon" width={20} height={20} />}>

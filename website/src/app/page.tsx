@@ -1,10 +1,7 @@
 "use client";
-import React, { useEffect } from "react";
-import InscriptionButton from "@/components/create-inscription";
-import {useInscription} from "@/hooks/useInscription";
+import React from "react";
 import { Logo } from "@/components/logo";
 import Image from "next/image";
-import BackgroundContainer from "@/components/background-container";
 import Cards from "@/components/card";
 
 export default function Home() {

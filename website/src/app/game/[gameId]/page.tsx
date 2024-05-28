@@ -55,7 +55,7 @@ const list = [
     }
 ];
 
-export default function Page({ params }: { params: { id: string } }) {
+export default function Page({ params : {gameId} }: { params: { gameId: string } }) {
     const router = useRouter();
     return <div className="flex flex-col items-center w-full h-screen bg-black p-4 sm:p-16 ">
         {/* description */}
@@ -114,7 +114,7 @@ export default function Page({ params }: { params: { id: string } }) {
                     />
                 </CardBody>
                 <CardFooter className="text-small justify-start p-0 py-2">
-                    <Button size="sm" color="primary" variant="light" startContent={<Image src="/play.svg" alt="game icon" width={10} height={10} />}>
+                    <Button size="sm" color="primary" variant="light" startContent={<Image src="/play.svg" alt="game icon" width={10} height={10} />} onClick={() => router.push(`/game/${gameId}/${item.inscriptionId}`)}>
                         Play
                     </Button>
                 </CardFooter>

@@ -3,6 +3,7 @@ import React, { useEffect, useRef } from "react";
 import { useGameHtml } from "@/hooks/useGameHtml";
 import { Button } from "@nextui-org/react";
 import Image from "next/image";
+import InscriptionButton from "@/components/create-inscription";
 
 export default function Page({ params }: { params: { gameId: string, variationId: string } }) {
     const gameHtml = useGameHtml(params.gameId, params.variationId);
@@ -47,9 +48,7 @@ export default function Page({ params }: { params: { gameId: string, variationId
                 <Button size="lg" color="primary" variant="light" startContent={<Image src="/flash.svg" alt="game icon" width={20} height={20} />}>
                     Randomize
                 </Button>
-                <Button size="lg" color="primary" variant="light" startContent={<Image src="/fire.svg" alt="game icon" width={20} height={20} />}>
-                    Mint
-                </Button>
+                <InscriptionButton gameId={params.gameId} variationId={params.variationId} receiveAddress={"tb1pe3snlln0x3ah77ewn4r30fqyl40lx03srhkp64nqlunueugmtprq96ruyf"} />
             </div>
         </div>
     );

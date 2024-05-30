@@ -1,25 +1,25 @@
 "use client";
 import { createInscriptionAction } from "@/app/actions";
 import { Button } from "@nextui-org/react";
+import Image from "next/image";
 import { BitcoinNetworkType, createInscription } from "sats-connect";
 
-const contentType = "text/html"; 
-const content = "My inscription text";
+const contentType = "application/json"; 
 const payloadType = "PLAIN_TEXT";
+
 
 const suggestedMinerFeeRate = 10; // suggest a fee rate for the transaction in sats/byte
 
 interface InscriptionButtonProps {
   appFee?: number;
   appFeeAddress?: string;
-  content: object;
-  collectionId: string;
-  address: string;
+  variationId: string;
+  gameId: string;
+  receiveAddress: string;
 }
 
-const InscriptionButton: React.FC<InscriptionButtonProps> = ({ appFee = 1000, appFeeAddress = "2MtuQnXGukJhyahSVPLRyFwGxgpwaL6mrc3", content = {
-    token: "my-token",
-}, collectionId, address}) => {
+const InscriptionButton: React.FC<InscriptionButtonProps> = ({ appFee = 1000, appFeeAddress = "2MtuQnXGukJhyahSVPLRyFwGxgpwaL6mrc3", variationId, gameId, receiveAddress }) => {
+  const content = JSON.stringify({ gameId, variationId });
   const createInscriptionSubmit = async () => {
     // const res = await createInscription({
     //     payload: {
@@ -27,37 +27,42 @@ const InscriptionButton: React.FC<InscriptionButtonProps> = ({ appFee = 1000, ap
     //         type: BitcoinNetworkType.Testnet,
     //       },
     //       contentType,
-    //       content: JSON.stringify(content),
+    //       content,
     //       payloadType,
     //       appFeeAddress,
-    //       appFee,
+    //       appFee: 1500,
     //       suggestedMinerFeeRate,
     //     },
     //     onFinish: (response) => {
-    //       alert(response.txId);
+    //       const form = new FormData();
+    //       // @ts-ignore
+    //       form.append('inscription_id', response.txid);
+    //       form.append('collection_id', gameId);
+    //       form.append('content', content);
+    //       form.append('address', receiveAddress);
+
+    //       createInscriptionAction(form);
     //     },
     //     onCancel: () => alert("Canceled"),
     //   });
 
-    // mock data
-    const res = {
+    const response = {
       txid: 'f30e558d8a4bfcae30fa6d72fadeb73b02f0b279400e6333cbd688a6920e3e17i0',
-      status: 'success',
-      error: null,
     }
-      const form = new FormData();
-      // @ts-ignore
-      form.append('inscription_id', res.txid);
-      form.append('collection_id', collectionId);
-      form.append('content', JSON.stringify(content));
-      form.append('address', address);
 
-    await createInscriptionAction(form);
+    const form = new FormData();
+          // @ts-ignore
+          form.append('inscription_id', response.txid);
+          form.append('collection_id', gameId);
+          form.append('content', content);
+          form.append('address', receiveAddress);
+
+          createInscriptionAction(form);
   };
 
   return (
-    <Button onClick={createInscriptionSubmit}>
-        Create Inscription
+    <Button size="lg" color="primary" variant="light" startContent={<Image src="/fire.svg" alt="game icon" width={20} height={20} />} onClick={createInscriptionSubmit}>
+        Mint
     </Button>
   );
 };

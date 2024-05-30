@@ -44,12 +44,11 @@ export default function Page({ params }: { params: { gameId: string, variationId
         <div className="flex flex-col items-center w-full h-screen bg-black p-4 sm:p-12">
         {/* @ts-ignore */}
             <iframe srcDoc={gameHtml} ref={iframeRef} className="w-full h-full border-white border-2 rounded-lg" />
-            <div className="flex gap-12 items-center">
+            {/* <div className="flex gap-12 items-center">
                 <Button size="lg" color="primary" variant="light" startContent={<Image src="/flash.svg" alt="game icon" width={20} height={20} />}>
-                    Randomize
+                    Reload
                 </Button>
-                <InscriptionButton gameId={params.gameId} variationId={params.variationId} receiveAddress={"tb1pe3snlln0x3ah77ewn4r30fqyl40lx03srhkp64nqlunueugmtprq96ruyf"} />
-            </div>
+            </div> */}
         </div>
     );
 }

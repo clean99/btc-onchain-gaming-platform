@@ -8,6 +8,7 @@ export async function createInscriptionAction(data: FormData) {
         collection_id: data.get('collection_id'),
         content: data.get('content'),
         address: data.get('address'),
+        img_url: data.get('img_url'),
     }
 
     console.log('rowDataFromForm', rowDataFromForm);
@@ -19,18 +20,12 @@ export async function createInscriptionAction(data: FormData) {
     try {
         // Insert into inscription table
         const result = await sql`
-            INSERT INTO inscription (address, inscription_id, collection_id) 
-            VALUES (${rowDataFromForm.address as string}, ${rowDataFromForm.inscription_id as string}, ${rowDataFromForm.collection_id as string})
+            INSERT INTO inscription (address, inscription_id, collection_id, content, img_url)
+            VALUES (${rowDataFromForm.address as string}, ${rowDataFromForm.inscription_id as string}, ${rowDataFromForm.collection_id as string}, ${rowDataFromForm.content as string}, ${rowDataFromForm.img_url as string})
             RETURNING id
         `;
 
         console.log(result);
-
-        // Insert into content table
-        await sql`
-            INSERT INTO content (inscription_id, content) 
-            VALUES (${result.rows[0].id as string}, ${rowDataFromForm.content as string})
-        `;
     } catch (error) {
         console.error('Database error:', error);
     }

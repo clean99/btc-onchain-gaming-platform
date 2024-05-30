@@ -15,8 +15,14 @@ export default function Page({ params : {gameId} }: { params: { gameId: string }
     const [collection, setCollection] = useState<Collection>();
     const [inscriptions, setInscriptions] = useState<Inscription[]>([]);
     const [currentInscriptionId, setCurrentInscriptionId] = useState<string>(uuidv4());
+    const [refreshSignal, setRefreshSignal] = useState<number>(0);
     const gameHtml = useGameHtml(gameId, currentInscriptionId);
     const iframeRef = useRef(null);
+
+    const refresh = () => {
+        setCurrentInscriptionId(uuidv4());
+        setRefreshSignal(refreshSignal + 1);
+    }
 
     useEffect(() => {
         // Function to stop propagation of keyboard events on the parent page
@@ -51,7 +57,7 @@ export default function Page({ params : {gameId} }: { params: { gameId: string }
     useEffect(() => {
         fetchCollection(gameId).then(setCollection);
         fetchInscriptions(gameId).then(setInscriptions);
-    }, [gameId]);
+    }, [gameId, refreshSignal]);
     
     return <div className="flex flex-col items-center w-full min-h-screen bg-black p-4 sm:p-16 ">
         {/* description */}
@@ -66,7 +72,7 @@ export default function Page({ params : {gameId} }: { params: { gameId: string }
                 }}>
                     Randomize
                 </Button>
-                <InscriptionButton gameId={collection?.collection_id ?? ''} variationId="1" receiveAddress={'tb1pe3snlln0x3ah77ewn4r30fqyl40lx03srhkp64nqlunueugmtprq96ruyf'} />
+                <InscriptionButton refresh={refresh} gameId={collection?.collection_id ?? ''} variationId="1" receiveAddress={'tb1pe3snlln0x3ah77ewn4r30fqyl40lx03srhkp64nqlunueugmtprq96ruyf'} />
                </div>
             </div>
             <div className="flex flex-col gap-6 flex-grow">

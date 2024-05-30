@@ -1,9 +1,6 @@
 "use client";
 import React, { useEffect, useRef } from "react";
 import { useGameHtml } from "@/hooks/useGameHtml";
-import { Button } from "@nextui-org/react";
-import Image from "next/image";
-import InscriptionButton from "@/components/create-inscription";
 
 export default function Page({ params }: { params: { gameId: string, variationId: string } }) {
     const gameHtml = useGameHtml(params.gameId, params.variationId);
@@ -44,11 +41,6 @@ export default function Page({ params }: { params: { gameId: string, variationId
         <div className="flex flex-col items-center w-full h-screen bg-black p-4 sm:p-12">
         {/* @ts-ignore */}
             <iframe srcDoc={gameHtml} ref={iframeRef} className="w-full h-full border-white border-2 rounded-lg" />
-            {/* <div className="flex gap-12 items-center">
-                <Button size="lg" color="primary" variant="light" startContent={<Image src="/flash.svg" alt="game icon" width={20} height={20} />}>
-                    Reload
-                </Button>
-            </div> */}
         </div>
     );
 }

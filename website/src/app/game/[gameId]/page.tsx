@@ -1,17 +1,53 @@
 "use client";
 import { fetchCollection, fetchInscriptions } from "@/app/lib/data";
 import InscriptionButton from "@/components/create-inscription";
-import { Collection, Inscription } from "@/types";
+import { useGameHtml } from "@/hooks/useGameHtml";
+import { Collection, GameStatus, Inscription } from "@/types";
 import { Button, Card, CardBody, CardFooter, Progress } from "@nextui-org/react"
 import Image from "next/image"
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { v4 as uuidv4 } from 'uuid';
 
 export default function Page({ params : {gameId} }: { params: { gameId: string } }) {
     const router = useRouter();
 
     const [collection, setCollection] = useState<Collection>();
     const [inscriptions, setInscriptions] = useState<Inscription[]>([]);
+    const [currentInscriptionId, setCurrentInscriptionId] = useState<string>(uuidv4());
+    const gameHtml = useGameHtml(gameId, currentInscriptionId);
+    const iframeRef = useRef(null);
+
+    useEffect(() => {
+        // Function to stop propagation of keyboard events on the parent page
+        const stopPropagation = (e: KeyboardEvent) => {
+        e.stopPropagation();
+        };
+
+        // Add event listeners to the parent document
+        document.addEventListener('keydown', stopPropagation, true);
+        document.addEventListener('keyup', stopPropagation, true);
+        document.addEventListener('keypress', stopPropagation, true);
+
+        // Ensure cleanup on component unmount
+        return () => {
+        document.removeEventListener('keydown', stopPropagation, true);
+        document.removeEventListener('keyup', stopPropagation, true);
+        document.removeEventListener('keypress', stopPropagation, true);
+        };
+    }, []);
+
+    useEffect(() => {
+        // Focus the iframe to ensure it receives keyboard events
+        const iframe = iframeRef.current;
+        if (iframe) {
+            // @ts-ignore
+        iframe.onload = () => {
+            // @ts-ignore
+            iframe.contentWindow.focus();
+        };
+        }
+    }, []);
     useEffect(() => {
         fetchCollection(gameId).then(setCollection);
         fetchInscriptions(gameId).then(setInscriptions);
@@ -21,19 +57,16 @@ export default function Page({ params : {gameId} }: { params: { gameId: string }
         {/* description */}
         <div className="flex gap-12 w-full flex-col sm:flex-row justify-between">
             {/* game photo */}
-            <div>
-                <Image src={`/game/${collection?.id}.png`} alt={collection?.name ?? ''} width={600} height={600} />
+            <div className="flex flex-col h-96 md:min-h-3.5 md:w-1/3">
+                 {/* @ts-ignore */}
+                <iframe srcDoc={gameHtml} ref={iframeRef} className="w-full h-full border-white border-2 rounded-lg" />
                 <div className="flex flex-row justify-between">
-                <Button size="lg" color="primary" variant="light" startContent={<Image src="/flash.svg" alt="game icon" width={20} height={20} />}>
+                <Button size="lg" color="primary" variant="light" startContent={<Image src="/flash.svg" alt="game icon" width={20} height={20} />} onClick={() => {
+                    setCurrentInscriptionId(uuidv4());
+                }}>
                     Randomize
                 </Button>
-                <Button size="lg" color="primary" variant="light" startContent={<Image src="/play.svg" alt="game icon" width={20} height={20} />}>
-                    Play
-                </Button>
                 <InscriptionButton gameId={collection?.collection_id ?? ''} variationId="1" receiveAddress={'tb1pe3snlln0x3ah77ewn4r30fqyl40lx03srhkp64nqlunueugmtprq96ruyf'} />
-                <Button size="lg" color="primary" variant="light" startContent={<Image src="/fire.svg" alt="game icon" width={20} height={20} />}>
-                    Reload  
-                </Button>
                </div>
             </div>
             <div className="flex flex-col gap-6 flex-grow">
@@ -49,7 +82,7 @@ export default function Page({ params : {gameId} }: { params: { gameId: string }
                     Mint Price: {collection?.price ? collection?.price + 'Sats' : 'Free'}
                 </div>
                 <div className="text-white">
-                    Current Phrase: {collection?.status}
+                    Current Phrase: {collection?.status === GameStatus.Pending ? 'Pending' : collection?.status === GameStatus.Started ? 'Live' : 'Completed'}
                 </div>
                 <div className="text-white">
                     Description: {collection?.description}

@@ -1,6 +1,5 @@
 "use client";
 import React from "react";
-import { Logo } from "@/components/logo";
 import Image from "next/image";
 import Cards from "@/components/card";
 

@@ -8,7 +8,7 @@ import { MANIC_INSCRIPTION_ID, RECEIVE_ADDRESS } from "@/constants";
 import { useGameHtml } from "@/hooks/useGameHtml";
 import { Collection, GameStatus, Inscription } from "@/types";
 import useLocalStorage from "@/utils/storage";
-import { Button, Card, CardBody, CardFooter, Progress, useDisclosure } from "@nextui-org/react"
+import { Button, Card, CardBody, CardFooter, Progress, Spinner, useDisclosure } from "@nextui-org/react"
 import Image from "next/image"
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
@@ -29,12 +29,14 @@ export default function Page({ params : {gameId} }: { params: { gameId: string }
     const [address] = useLocalStorage<[string, string] | null>('address', null);
 
 
-    const refresh = (txid: string) => {
+    const refresh = (txid?: string) => {
         setIsLoading(true);
         setCurrentInscriptionId(uuidv4());
         setRefreshSignal(refreshSignal + 1);
         setIsMinting(false);
-        setTxid(txid);
+        if (txid) {
+            setTxid(txid);
+        }
     }
 
     const startMinting = () => {
@@ -76,6 +78,12 @@ export default function Page({ params : {gameId} }: { params: { gameId: string }
         fetchCollection(gameId).then(setCollection);
         fetchInscriptions(gameId).then(setInscriptions).finally(() => setIsLoading(false));
     }, [gameId, refreshSignal]);
+
+    if(isLoading) {
+        return <div className="flex flex-col items-center w-full h-screen bg-black p-4 sm:p-16">
+            <Spinner />
+        </div>
+    }
     
     return <div className="flex flex-col items-center w-full min-h-screen bg-black p-4 sm:p-16 ">
         <MintLoadingDrawer isMinting={isMinting} title={isMinting ? "Minting..." : "Mint Result"} description={isMinting ? "Please wait for a moment..." : <>
@@ -85,18 +93,21 @@ export default function Page({ params : {gameId} }: { params: { gameId: string }
         </>} isOpen={isOpen} onOpenChange={onOpenChange} />
         
         {/* description */}
-        <div className="flex gap-12 w-full flex-col sm:flex-row justify-between">
+        <div className="flex gap-12 w-full flex-col lg:flex-row justify-between flex-wrap">
             {/* game photo */}
-            <div className="flex flex-col h-96 md:min-h-3.5 md:w-1/3">
+            <div>
+            <div className="flex flex-col h-[350px] w-[350px] md:min-h[350px] md:min-w[350px] lg:min-h-[500px] lg:min-w-[500px]">
                  {/* @ts-ignore */}
                 <iframe srcDoc={gameHtml} ref={iframeRef} className="w-full h-full border-white border-2 rounded-lg" />
-                <div className="flex flex-row justify-between">
+                
+            </div>
+            <div className="flex flex-row justify-between">
                 <Button size="lg" color="primary" variant="light" startContent={<Image src="/flash.svg" alt="game icon" width={20} height={20} />} onClick={() => {
                     setCurrentInscriptionId(uuidv4());
                 }}>
                     Randomize
                 </Button>
-                <InscriptionButton startMinting={startMinting} refresh={refresh} gameId={collection?.collection_id ?? ''} variationId={currentInscriptionId} receiveAddress={address?.[1] ?? '' as string} appFeeAddress={RECEIVE_ADDRESS} />
+                <InscriptionButton startMinting={startMinting} refresh={refresh} gameId={collection?.collection_id ?? ''} variationId={currentInscriptionId} receiveAddress={address?.[1] ?? '' as string} appFeeAddress={RECEIVE_ADDRESS} appFee={collection?.price} />
                </div>
             </div>
             <div className="flex flex-col gap-6 flex-grow">
@@ -106,7 +117,7 @@ export default function Page({ params : {gameId} }: { params: { gameId: string }
                  <span className="text-sm font-light text-white">{inscriptions?.length} / {collection?.number} minted</span>
                 </div>
                 <div className="text-white">
-                    Inscription ID: <InscriptionIdLink inscriptionId={collection?.collection_id ?? ''} isProd={collection?.collection_id === MANIC_INSCRIPTION_ID} />
+                    Inscription ID: <InscriptionIdLink inscriptionId={collection?.collection_id ?? ''} isProd={true} />
                 </div>
                 <div className="text-white">
                     Mint Price: {collection?.price ? collection?.price + 'Sats' : 'Free'}
@@ -114,7 +125,7 @@ export default function Page({ params : {gameId} }: { params: { gameId: string }
                 <div className="text-white">
                     Current Phrase: {collection?.status === GameStatus.Pending ? 'Pending' : collection?.status === GameStatus.Started ? 'Live' : 'Completed'}
                 </div>
-                <div className="text-white">
+                <div className="text-white max-w-[500px] lg:max-w-[680px]">
                     Description: {collection?.description}
                 </div>
                 <div className="text-white">
@@ -127,7 +138,7 @@ export default function Page({ params : {gameId} }: { params: { gameId: string }
             <h1 className="text-4xl font-bold text-white">Minted Variations</h1>
             <div className="gap-4 grid grid-cols-2 sm:grid-cols-4">
             { isLoading
-             ? <SkeletonCardGroup count={10} />
+             ? <Spinner />
                 : inscriptions.map((item, index) => (
                 <Card shadow="sm" key={index} className="bg-black">
                 <CardBody className="overflow-visible p-0">

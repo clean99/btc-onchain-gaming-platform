@@ -1,7 +1,6 @@
 "use client";
 import { Button, Card, CardBody, CardFooter, Progress } from "@nextui-org/react"
 import Image from "next/image"
-import { useRouter } from "next/navigation";
 
 enum GameStatus {
     Pending = "Pending",
@@ -79,7 +78,6 @@ const list = [
 ];
 
 export default function Page({ params : {gameId} }: { params: { gameId: string } }) {
-    const router = useRouter();
     return <div className="gap-2 grid grid-cols-2 sm:grid-cols-3 w-full h-screen bg-black p-4 sm:p-16">
            <div className="flex flex-col gap-4 items-center border-white border-2 p-4 rounded-md">
             <div className="flex gap-4 flex-wrap justify-start w-full">

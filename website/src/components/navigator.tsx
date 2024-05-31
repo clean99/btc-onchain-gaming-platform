@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import {Navbar, NavbarBrand, NavbarContent, NavbarItem, Link, Button} from "@nextui-org/react";
+import {Navbar, NavbarContent, NavbarItem, Link} from "@nextui-org/react";
 import { Logo } from "@/components/logo";
 import { usePathname } from "next/navigation";
 import AddressButton from "./profile";

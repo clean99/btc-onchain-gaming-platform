@@ -13,15 +13,15 @@ export default function Page() {
     const [address] = useAuthStore((state) => [state.address]);
     const [isLoading, setIsLoading] = React.useState<boolean>(true);
     const [inscriptions, setInscriptions] = React.useState<Inscription[]>([]);
-    console.log(address);
+
     useEffect(() => {
         setTimeout(() => {
-            if (!address) {
+            if (!isLoading && !address) {
                 toast.error("Please connect your wallet first!");
                 redirect("/");
             }
         });
-    }, []);
+    }, [isLoading]);
 
     useEffect(() => {
         fetchMineInscriptions(address?.[1] ?? '').then(setInscriptions).finally(() => setIsLoading(false));

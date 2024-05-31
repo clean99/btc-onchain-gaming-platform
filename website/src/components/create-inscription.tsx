@@ -5,7 +5,7 @@ import { getScreenShot } from "@/utils/getScreenShot";
 import { Button } from "@nextui-org/react";
 import Image from "next/image";
 import { BitcoinNetworkType, createInscription } from "sats-connect";
-
+import { toast } from "react-toastify";
 const contentType = "application/json";
 const payloadType = "PLAIN_TEXT";
 const suggestedMinerFeeRate = 11;
@@ -16,69 +16,51 @@ interface InscriptionButtonProps {
   variationId: string;
   gameId: string;
   receiveAddress: string;
-  refresh: (txid: string) => void;
+  refresh: (txid?: string) => void;
   startMinting: () => void;
 }
 
-const InscriptionButton: React.FC<InscriptionButtonProps> = ({ appFee = 1000, appFeeAddress = "2MtuQnXGukJhyahSVPLRyFwGxgpwaL6mrc3", variationId, gameId, receiveAddress, refresh, startMinting }) => {
+const InscriptionButton: React.FC<InscriptionButtonProps> = ({ appFee = 0, appFeeAddress = "2MtuQnXGukJhyahSVPLRyFwGxgpwaL6mrc3", variationId, gameId, receiveAddress, refresh, startMinting }) => {
   const content = JSON.stringify({ gameId, variationId });
   const address = useAuthStore((state) => state.address);
-  const createInscriptionSubmit = async () => {
-    // const res = await createInscription({
-    //     payload: {
-    //       network: {
-    //         type: BitcoinNetworkType.Testnet,
-    //       },
-    //       contentType,
-    //       content,
-    //       payloadType,
-    //       appFeeAddress,
-    //       appFee: 1500,
-    //       suggestedMinerFeeRate,
-    //     },
-    //     onFinish: (response: {
-    //       txid: string;
-    //     }) => {
-    //       const form = new FormData();
-    //       // @ts-ignore
-    //       form.append('inscription_id', response.txid);
-    //       form.append('collection_id', gameId);
-    //       form.append('content', content);
-    //       form.append('address', receiveAddress);
-
-    //       createInscriptionAction(form);
-    //     },
-    //     onCancel: () => alert("Canceled"),
-    //   });
-
-    startMinting();
-    const mockData = {
-      id: 1,
-      collection_id: gameId,
-      inscription_id: variationId,
-      content,
-      img_url: await getScreenShot(),
-    };
-
-    const response = {
-      txid: 'f30e558d8a4bfcae30fa6d72fadeb73b02f0b279400e6333cbd688a6920e3e17',
-    }
-
-    const form = new FormData();
-          // // @ts-ignore
-          // form.append('inscription_id', response.txid);
-          // form.append('collection_id', gameId);
-          // form.append('content', content);
-          // form.append('address', receiveAddress);
-
-          form.append('inscription_id', mockData.inscription_id);
-          form.append('collection_id', mockData.collection_id);
-          form.append('content', JSON.stringify(mockData.content));
-          form.append('address', receiveAddress);
-          form.append('img_url', mockData.img_url);
-
-      await createInscriptionAction(form);
-      refresh(response.txid);
+  console.log(appFee, appFeeAddress, variationId, gameId, receiveAddress, content);
+  const createInscriptionSubmit = () => {
+    createInscription({
+        payload: {
+          network: {
+            type: BitcoinNetworkType.Testnet,
+          },
+          contentType,
+          content,
+          payloadType,
+          appFeeAddress,
+          appFee: appFee,
+          suggestedMinerFeeRate,
+        },
+        // @ts-ignore
+        onFinish: async (response: {
+          txid: string;
+        }) => {
+          try {
+            startMinting();
+            const form = new FormData();
+            // // @ts-ignore
+            form.append('inscription_id', response.txid);
+            form.append('collection_id', gameId);
+            form.append('content', content);
+            form.append('address', receiveAddress);
+            form.append('img_url', await getScreenShot());
+            await createInscriptionAction(form);
+            refresh(response.txid);
+          } catch (error: any) {
+            toast.error(error?.message);
+          }
+        },
+        onCancel: () => {
+          toast.info("Transaction Cancelled!");
+          refresh();
+        }
+      });
   };
 
   return (

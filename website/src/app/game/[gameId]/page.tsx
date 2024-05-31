@@ -1,10 +1,13 @@
 "use client";
 import { fetchCollection, fetchInscriptions } from "@/app/lib/data";
 import InscriptionButton from "@/components/create-inscription";
+import { InscriptionIdLink } from "@/components/inscriptionid-link";
 import { MintLoadingDrawer } from "@/components/mint-loading-drawer";
 import { SkeletonCardGroup } from "@/components/skeleton";
+import { MANIC_INSCRIPTION_ID, RECEIVE_ADDRESS } from "@/constants";
 import { useGameHtml } from "@/hooks/useGameHtml";
 import { Collection, GameStatus, Inscription } from "@/types";
+import useLocalStorage from "@/utils/storage";
 import { Button, Card, CardBody, CardFooter, Progress, useDisclosure } from "@nextui-org/react"
 import Image from "next/image"
 import { useRouter } from "next/navigation";
@@ -23,6 +26,8 @@ export default function Page({ params : {gameId} }: { params: { gameId: string }
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const gameHtml = useGameHtml(gameId, currentInscriptionId);
     const iframeRef = useRef(null);
+    const [address] = useLocalStorage<[string, string] | null>('address', null);
+
 
     const refresh = (txid: string) => {
         setIsLoading(true);
@@ -73,7 +78,11 @@ export default function Page({ params : {gameId} }: { params: { gameId: string }
     }, [gameId, refreshSignal]);
     
     return <div className="flex flex-col items-center w-full min-h-screen bg-black p-4 sm:p-16 ">
-        <MintLoadingDrawer isMinting={isMinting} title={isMinting ? "Minting..." : "Mint Result"} description={isMinting ? "Please wait for a moment..." : `Minted successfully! Your inscription id is: ${txid}. You can play the game on the platform right now. It might take some time to sync to your wallet.`} isOpen={isOpen} onOpenChange={onOpenChange} />
+        <MintLoadingDrawer isMinting={isMinting} title={isMinting ? "Minting..." : "Mint Result"} description={isMinting ? "Please wait for a moment..." : <>
+            {
+                `Minted successfully! Your inscription id is:`} <InscriptionIdLink inscriptionId={txid} />{`. You can play the game on the platform right now. It might take some time to sync to your wallet.`
+            }
+        </>} isOpen={isOpen} onOpenChange={onOpenChange} />
         
         {/* description */}
         <div className="flex gap-12 w-full flex-col sm:flex-row justify-between">
@@ -87,7 +96,7 @@ export default function Page({ params : {gameId} }: { params: { gameId: string }
                 }}>
                     Randomize
                 </Button>
-                <InscriptionButton startMinting={startMinting} refresh={refresh} gameId={collection?.collection_id ?? ''} variationId="1" receiveAddress={'tb1pe3snlln0x3ah77ewn4r30fqyl40lx03srhkp64nqlunueugmtprq96ruyf'} />
+                <InscriptionButton startMinting={startMinting} refresh={refresh} gameId={collection?.collection_id ?? ''} variationId={currentInscriptionId} receiveAddress={address?.[1] ?? '' as string} appFeeAddress={RECEIVE_ADDRESS} />
                </div>
             </div>
             <div className="flex flex-col gap-6 flex-grow">
@@ -97,7 +106,7 @@ export default function Page({ params : {gameId} }: { params: { gameId: string }
                  <span className="text-sm font-light text-white">{inscriptions?.length} / {collection?.number} minted</span>
                 </div>
                 <div className="text-white">
-                    Inscription ID: {collection?.collection_id}
+                    Inscription ID: <InscriptionIdLink inscriptionId={collection?.collection_id ?? ''} isProd={collection?.collection_id === MANIC_INSCRIPTION_ID} />
                 </div>
                 <div className="text-white">
                     Mint Price: {collection?.price ? collection?.price + 'Sats' : 'Free'}

@@ -1,4 +1,5 @@
 'use server';
+import { Inscription } from '@/types';
 import { sql } from '@vercel/postgres';
 
 
@@ -29,4 +30,12 @@ export async function createInscriptionAction(data: FormData) {
     } catch (error) {
         console.error('Database error:', error);
     }
+}
+
+export const fetchMineInscriptions = async (address: string) => {
+    const result = await sql`
+        SELECT * FROM inscription WHERE address = ${address}
+    `;
+
+    return result.rows as Inscription[];
 }

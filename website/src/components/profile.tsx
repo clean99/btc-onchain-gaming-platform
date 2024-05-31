@@ -1,14 +1,15 @@
 "use client";
-import useLocalStorage from '../utils/storage';
+import { useLocalStorage } from 'usehooks-ts'; 
 import {AddressPurpose, RpcErrorCode, request} from "sats-connect";
 import {Button, Dropdown, DropdownTrigger, DropdownMenu, DropdownItem} from "@nextui-org/react";
 import {ChevronDownIcon} from './down-arrow';
 import WalletIcon from './wallet';
+import { toast } from "react-toastify";
+import { useAuthStore } from '@/states/auth';
 
 
 const AddressButton = () => {
-  const [address, setAddress] = useLocalStorage<[string, string] | null>('address', null);
-
+  const [address, setAddress, removeAddress] = useAuthStore((state) => [state.address, state.setAddress, state.removeAddress]);
   const connect = async () => {
     try {
       const response = await request('getAccounts', {
@@ -35,11 +36,11 @@ const AddressButton = () => {
         }
       }
     } catch (err: any) {
-        alert(err.error.message);
+        toast.error(err.error.message);
     }
   }
 
-  return (<div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', width: '160px'}}>
+  return (<div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', width: '180px'}}>
     {
         address ? (
             // 省略号表示省略的部分
@@ -59,7 +60,7 @@ const AddressButton = () => {
           className="max-w-[160px]"
         >
           <DropdownItem key="merge" onClick={() => {
-            setAddress(null);
+            removeAddress();
           }}>
             Logout
           </DropdownItem>

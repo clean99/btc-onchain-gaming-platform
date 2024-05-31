@@ -9,7 +9,7 @@ export const SkeletonCardGroup = ({
         <>
             {list.map((item, index) => (
                 <Card key={index} className="space-y-5 p-4 bg-gray-900" radius="lg">
-                    <Skeleton className="rounded-lg min-h-[130px] md:min-h-[360px]">
+                    <Skeleton className="rounded-lg min-h-[130px]  xl:min-h-[360px]">
                     <div className="h-24 rounded-lg bg-default-300"></div>
                     </Skeleton>
                     <div className="space-y-3">

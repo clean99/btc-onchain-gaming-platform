@@ -4,11 +4,12 @@ import {Navbar, NavbarBrand, NavbarContent, NavbarItem, Link, Button} from "@nex
 import { Logo } from "@/components/logo";
 import { usePathname } from "next/navigation";
 import AddressButton from "./profile";
+import { useAuthStore } from "@/states/auth";
 
 export default function Navigator() {
     // get url path to determine which link is active
      const pathname = usePathname();
-     console.log(pathname);
+    const [address] = useAuthStore((state) => [state.address]);
   return (
     <Navbar maxWidth="full" className="bg-black border-white" isBordered>
       <NavbarContent>
@@ -21,8 +22,13 @@ export default function Navigator() {
             CURATION
           </Link>
         </NavbarItem>
-        <NavbarItem isActive={pathname === "/leaderboard"}>
-          <Link href="/leaderboard" color="foreground">
+        <NavbarItem isActive={pathname === "/gallery"}>
+          <Link href="/gallery" color="foreground" isDisabled={!address}>
+            Gallery
+          </Link>
+        </NavbarItem>
+        <NavbarItem isActive={pathname === "/leaderboard"} >
+          <Link href="/leaderboard" color="foreground" isDisabled>
             LEADER BOARD
           </Link>
         </NavbarItem>

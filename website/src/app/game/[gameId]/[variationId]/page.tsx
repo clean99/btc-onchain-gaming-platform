@@ -1,6 +1,7 @@
 "use client";
 import React, { useEffect, useRef } from "react";
 import { useGameHtml } from "@/hooks/useGameHtml";
+import { InscriptionIdLink } from "@/components/inscriptionid-link";
 
 export default function Page({ params }: { params: { gameId: string, variationId: string } }) {
     const gameHtml = useGameHtml(params.gameId, params.variationId);
@@ -39,8 +40,12 @@ export default function Page({ params }: { params: { gameId: string, variationId
 
     return (
         <div className="flex flex-col items-center w-full h-screen bg-black p-4 sm:p-12">
-        {/* @ts-ignore */}
-            <iframe srcDoc={gameHtml} ref={iframeRef} className="w-full h-full border-white border-2 rounded-lg" />
-        </div>
+                <div className="text-white text-2xl font-bold">
+                    TxID: <InscriptionIdLink inscriptionId={params.variationId} />
+                </div>
+                  {/* @ts-ignore */}
+                <iframe srcDoc={gameHtml} ref={iframeRef} className="w-full h-full border-white border-2 rounded-lg mt-2" />
+               
+            </div>
     );
 }

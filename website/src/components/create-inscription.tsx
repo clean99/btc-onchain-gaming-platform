@@ -1,5 +1,6 @@
 "use client";
 import { createInscriptionAction } from "@/app/lib/actions";
+import { useAuthStore } from "@/states/auth";
 import { getScreenShot } from "@/utils/getScreenShot";
 import { Button } from "@nextui-org/react";
 import Image from "next/image";
@@ -21,6 +22,7 @@ interface InscriptionButtonProps {
 
 const InscriptionButton: React.FC<InscriptionButtonProps> = ({ appFee = 1000, appFeeAddress = "2MtuQnXGukJhyahSVPLRyFwGxgpwaL6mrc3", variationId, gameId, receiveAddress, refresh, startMinting }) => {
   const content = JSON.stringify({ gameId, variationId });
+  const address = useAuthStore((state) => state.address);
   const createInscriptionSubmit = async () => {
     // const res = await createInscription({
     //     payload: {
@@ -59,7 +61,7 @@ const InscriptionButton: React.FC<InscriptionButtonProps> = ({ appFee = 1000, ap
     };
 
     const response = {
-      txid: 'f30e558d8a4bfcae30fa6d72fadeb73b02f0b279400e6333cbd688a6920e3e17i0',
+      txid: 'f30e558d8a4bfcae30fa6d72fadeb73b02f0b279400e6333cbd688a6920e3e17',
     }
 
     const form = new FormData();
@@ -80,7 +82,7 @@ const InscriptionButton: React.FC<InscriptionButtonProps> = ({ appFee = 1000, ap
   };
 
   return (
-    <Button size="lg" color="primary" variant="light" startContent={<Image src="/fire.svg" alt="game icon" width={20} height={20} />} onClick={createInscriptionSubmit}>
+    <Button disabled={!address} isDisabled={!address} size="lg" color="primary" variant="light" startContent={<Image src="/fire.svg" alt="game icon" width={20} height={20} />} onClick={createInscriptionSubmit}>
         Mint
     </Button>
   );

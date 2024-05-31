@@ -1,0 +1,2 @@
+export const MANIC_INSCRIPTION_ID = '06f91ab20a59311649c7f2f915ed60dd35eca75f3ca5f8e30b8fce2de9cf7e7fi0';
+export const RECEIVE_ADDRESS = '2MtuQnXGukJhyahSVPLRyFwGxgpwaL6mrc3';

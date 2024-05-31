@@ -5,7 +5,7 @@ interface MintLoadingDrawerProps {
   isOpen: boolean;
   onOpenChange: (isOpen: boolean) => void;
   title: string;
-  description: string;
+  description: string | React.ReactNode;
   isMinting: boolean;
 }
 

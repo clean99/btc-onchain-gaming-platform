@@ -7,7 +7,7 @@ import localFont from 'next/font/local'
  
 // Font files can be colocated inside of `app`
 const myFont = localFont({
-  src: './JxTabeDEMO-Regular.ttf',
+  src: './Geo-Regular.ttf',
   display: 'swap',
 })
 export const metadata: Metadata = {

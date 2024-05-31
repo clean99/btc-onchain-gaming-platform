@@ -7,14 +7,13 @@ import Cards from "@/components/card";
 export default function Home() {
   return (
     <main>
-      <div className="flex flex-col items-center justify-center w-full h-screen bg-black p-16 xl:p-96" style={{height: `calc(100vh - 64px)`}}>
-        <Logo style={{ width: "60%" }} />
-        <div className="text-center text-xl mt-8" style={{
-          color: 'rgba(182, 182, 182, 1)'
-        }}>
-        Transform game issuance through coded generative art.
-        </div>
-      </div>
+      <div className="flex flex-col items-start justify-start w-full h-screen bg-black p-16 sm:p-72" style={{
+        backgroundImage: "url('/landingpage.svg')",
+        backgroundSize: window.innerWidth < 640 ? "contain" : "cover",
+        backgroundPosition: window.innerWidth < 640 ? "center" : "bottom center",
+        backgroundRepeat: "no-repeat",
+      
+      }} />
       <div className="w-full h-screen p-16 bg-orange-400">
        <div className="flex flex-col gap-4">
         <div className="flex">

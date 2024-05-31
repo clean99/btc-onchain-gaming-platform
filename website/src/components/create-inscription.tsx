@@ -47,7 +47,7 @@ const InscriptionButton: React.FC<InscriptionButtonProps> = ({ appFee = 0, appFe
             form.append('inscription_id', response.txId);
             form.append('collection_id', gameId);
             form.append('content', content);
-            form.append('address', receiveAddress);
+            form.append('address', address?.[1] ?? '');
             form.append('img_url', await getScreenShot());
             await createInscriptionAction(form);
             refresh(response.txId);

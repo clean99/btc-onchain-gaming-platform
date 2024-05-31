@@ -6,8 +6,8 @@ import { MintLoadingDrawer } from "@/components/mint-loading-drawer";
 import { SkeletonCardGroup } from "@/components/skeleton";
 import { MANIC_INSCRIPTION_ID, RECEIVE_ADDRESS } from "@/constants";
 import { useGameHtml } from "@/hooks/useGameHtml";
+import { useAuthStore } from "@/states/auth";
 import { Collection, GameStatus, Inscription } from "@/types";
-import useLocalStorage from "@/utils/storage";
 import { Button, Card, CardBody, CardFooter, Progress, Spinner, useDisclosure } from "@nextui-org/react"
 import Image from "next/image"
 import { useRouter } from "next/navigation";
@@ -26,7 +26,7 @@ export default function Page({ params : {gameId} }: { params: { gameId: string }
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const gameHtml = useGameHtml(gameId, currentInscriptionId);
     const iframeRef = useRef(null);
-    const [address] = useLocalStorage<[string, string] | null>('address', null);
+    const [address] = useAuthStore((state) => [state.address, state.setAddress]);
 
 
     const refresh = (txid?: string) => {
@@ -98,7 +98,7 @@ export default function Page({ params : {gameId} }: { params: { gameId: string }
             <div>
             <div className="flex flex-col h-[350px] w-[350px] md:min-h[350px] md:min-w[350px] lg:min-h-[500px] lg:min-w-[500px]">
                  {/* @ts-ignore */}
-                <iframe srcDoc={gameHtml} ref={iframeRef} className="w-full h-full border-white border-2 rounded-lg" />
+                <iframe srcDoc={gameHtml} ref={iframeRef} className="h-[348px] w-[348px] border-white border-2 rounded-lg" />
                 
             </div>
             <div className="flex flex-row justify-between">
@@ -110,7 +110,7 @@ export default function Page({ params : {gameId} }: { params: { gameId: string }
                 <InscriptionButton startMinting={startMinting} refresh={refresh} gameId={collection?.collection_id ?? ''} variationId={currentInscriptionId} receiveAddress={address?.[1] ?? '' as string} appFeeAddress={RECEIVE_ADDRESS} appFee={collection?.price} />
                </div>
             </div>
-            <div className="flex flex-col gap-6 flex-grow">
+            <div className="flex flex-col gap-6 flex-grow w-full lg:w-[600px]">
                 <h1 className="text-4xl font-bold text-white">{collection?.name} <span className="text-sm font-light">BY: {collection?.author}</span></h1>
                 <div>
                  <Progress aria-label="Loading..." value={inscriptions?.length} maxValue={collection?.number} className="max-w-md" size="lg" />

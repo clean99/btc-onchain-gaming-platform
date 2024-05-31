@@ -1,8 +1,6 @@
 "use client";
-import React, { useContext, useEffect, useLayoutEffect } from "react";
-import { SkeletonCardGroup } from "@/components/skeleton";
-import useLocalStorage from "@/utils/storage";
-import { Button, Card, CardBody, CardFooter, Progress, Spinner } from "@nextui-org/react"
+import React, { useEffect } from "react";
+import { Button, Card, CardBody, CardFooter, Spinner } from "@nextui-org/react"
 import Image from "next/image"
 import { redirect, useRouter } from "next/navigation";
 import { fetchMineInscriptions } from "../lib/actions";

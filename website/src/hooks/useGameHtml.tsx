@@ -50,11 +50,12 @@ const htmlTemplate = (tokenHash: string, gameScript: string) => `
 
 export function useGameHtml(gameId: string, variationId: string) {
     const [gameHtml, setGameHtml] = useState<string | null>(null);
+
     useEffect(() => {
         fetch(`/game-script/${gameId}.js`)
         .then((response) => response.text())
         .then((data) => {
-            setGameHtml(htmlTemplate(variationId, data));
+            setGameHtml(htmlTemplate(variationId.toString().padEnd(66, '0'), data));
         });
     }, [gameId, variationId]);
 

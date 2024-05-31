@@ -1,19 +1,30 @@
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import Cards from "@/components/card";
 
 export default function Home() {
+  const [windowWidth, setWindowWidth] = useState(0);
+  const [windowHeight, setWindowHeight] = useState(0);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+      setWindowHeight(window.innerHeight);
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
   return (
     <main>
       <div className="flex flex-col items-start justify-start w-full h-screen bg-black p-16 sm:p-72" style={{
         backgroundImage: "url('/landingpage.svg')",
-        backgroundSize: window.innerWidth < 640 ? "contain" : "cover",
-        backgroundPosition: window.innerWidth < 640 ? "center" : "bottom center",
+        backgroundSize: windowWidth < 640 ? "contain" : "cover",
+        backgroundPosition: windowHeight < 640 ? "center" : "bottom center",
         backgroundRepeat: "no-repeat",
       
       }} />
-      <div className="w-full h-screen p-16 bg-orange-400">
+      <div className="w-full min-h-screen p-16 bg-orange-400">
        <div className="flex flex-col gap-4">
         <div className="flex">
           <div className="text-white flex flex-col gap-4">

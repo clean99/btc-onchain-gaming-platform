@@ -24,7 +24,7 @@ const InscriptionButton: React.FC<InscriptionButtonProps> = ({ appFee = 0, appFe
   const content = JSON.stringify({ gameId, variationId });
   const address = useAuthStore((state) => state.address);
   console.log(appFee, appFeeAddress, variationId, gameId, receiveAddress, content);
-  const createInscriptionSubmit = () => {
+  const createInscriptionSubmit = async () => {
     createInscription({
         payload: {
           network: {
@@ -33,32 +33,32 @@ const InscriptionButton: React.FC<InscriptionButtonProps> = ({ appFee = 0, appFe
           contentType,
           content,
           payloadType,
-          appFeeAddress,
-          appFee: appFee,
+          appFeeAddress: appFee === 0 ? undefined : appFeeAddress,
+          appFee: appFee === 0 ? undefined : appFee,
           suggestedMinerFeeRate,
         },
         // @ts-ignore
         onFinish: async (response: {
-          txid: string;
+          txId: string;
         }) => {
           try {
             startMinting();
             const form = new FormData();
             // // @ts-ignore
-            form.append('inscription_id', response.txid);
+            form.append('inscription_id', response.txId);
             form.append('collection_id', gameId);
             form.append('content', content);
             form.append('address', receiveAddress);
             form.append('img_url', await getScreenShot());
             await createInscriptionAction(form);
-            refresh(response.txid);
+            refresh(response.txId);
           } catch (error: any) {
             toast.error(error?.message);
           }
         },
         onCancel: () => {
           toast.info("Transaction Cancelled!");
-          refresh();
+          // refresh();
         }
       });
   };

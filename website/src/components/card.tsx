@@ -4,18 +4,22 @@ import {Card, CardBody, CardFooter, CardHeader, Image} from "@nextui-org/react";
 import { useRouter } from "next/navigation";
 import { fetchCollections } from "@/app/lib/data";
 import { Collection, GameStatus } from "@/types";
+import { SkeletonCardGroup } from "./skeleton";
 
 
 export default function Cards() {
     const router = useRouter();
     const [collections, setCollections] = React.useState<Collection[]>([]);
+    const [isLoading, setIsLoading] = React.useState<boolean>(true);
     React.useEffect(() => {
-        fetchCollections().then(setCollections);
+        fetchCollections().then(setCollections).finally(() => setIsLoading(false));
     }, []);
 
     return (
         <div className="gap-2 grid grid-cols-2 sm:grid-cols-4">
-        {collections.map((item: Collection, index: number) => (
+        {isLoading 
+            ? <SkeletonCardGroup />
+            : collections.map((item: Collection, index: number) => (
             <Card shadow="sm" key={index} isPressable onPress={() => {
                 router.push("/game/" + item.collection_id);
             }}>

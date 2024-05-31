@@ -1,9 +1,11 @@
 "use client";
 import { fetchCollection, fetchInscriptions } from "@/app/lib/data";
 import InscriptionButton from "@/components/create-inscription";
+import { MintLoadingDrawer } from "@/components/mint-loading-drawer";
+import { SkeletonCardGroup } from "@/components/skeleton";
 import { useGameHtml } from "@/hooks/useGameHtml";
 import { Collection, GameStatus, Inscription } from "@/types";
-import { Button, Card, CardBody, CardFooter, Progress } from "@nextui-org/react"
+import { Button, Card, CardBody, CardFooter, Progress, useDisclosure } from "@nextui-org/react"
 import Image from "next/image"
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
@@ -11,17 +13,28 @@ import { v4 as uuidv4 } from 'uuid';
 
 export default function Page({ params : {gameId} }: { params: { gameId: string } }) {
     const router = useRouter();
-
+    const {isOpen, onOpen, onOpenChange} = useDisclosure();
     const [collection, setCollection] = useState<Collection>();
     const [inscriptions, setInscriptions] = useState<Inscription[]>([]);
     const [currentInscriptionId, setCurrentInscriptionId] = useState<string>(uuidv4());
     const [refreshSignal, setRefreshSignal] = useState<number>(0);
+    const [isMinting, setIsMinting] = useState<boolean>(false);
+    const [txid, setTxid] = useState<string>('');
+    const [isLoading, setIsLoading] = useState<boolean>(true);
     const gameHtml = useGameHtml(gameId, currentInscriptionId);
     const iframeRef = useRef(null);
 
-    const refresh = () => {
+    const refresh = (txid: string) => {
+        setIsLoading(true);
         setCurrentInscriptionId(uuidv4());
         setRefreshSignal(refreshSignal + 1);
+        setIsMinting(false);
+        setTxid(txid);
+    }
+
+    const startMinting = () => {
+        setIsMinting(true);
+        onOpen();
     }
 
     useEffect(() => {
@@ -56,10 +69,12 @@ export default function Page({ params : {gameId} }: { params: { gameId: string }
     }, []);
     useEffect(() => {
         fetchCollection(gameId).then(setCollection);
-        fetchInscriptions(gameId).then(setInscriptions);
+        fetchInscriptions(gameId).then(setInscriptions).finally(() => setIsLoading(false));
     }, [gameId, refreshSignal]);
     
     return <div className="flex flex-col items-center w-full min-h-screen bg-black p-4 sm:p-16 ">
+        <MintLoadingDrawer isMinting={isMinting} title={isMinting ? "Minting..." : "Mint Result"} description={isMinting ? "Please wait for a moment..." : `Minted successfully! Your inscription id is: ${txid}. You can play the game on the platform right now. It might take some time to sync to your wallet.`} isOpen={isOpen} onOpenChange={onOpenChange} />
+        
         {/* description */}
         <div className="flex gap-12 w-full flex-col sm:flex-row justify-between">
             {/* game photo */}
@@ -72,7 +87,7 @@ export default function Page({ params : {gameId} }: { params: { gameId: string }
                 }}>
                     Randomize
                 </Button>
-                <InscriptionButton refresh={refresh} gameId={collection?.collection_id ?? ''} variationId="1" receiveAddress={'tb1pe3snlln0x3ah77ewn4r30fqyl40lx03srhkp64nqlunueugmtprq96ruyf'} />
+                <InscriptionButton startMinting={startMinting} refresh={refresh} gameId={collection?.collection_id ?? ''} variationId="1" receiveAddress={'tb1pe3snlln0x3ah77ewn4r30fqyl40lx03srhkp64nqlunueugmtprq96ruyf'} />
                </div>
             </div>
             <div className="flex flex-col gap-6 flex-grow">
@@ -102,7 +117,9 @@ export default function Page({ params : {gameId} }: { params: { gameId: string }
         <div className="w-full flex flex-col gap-4 mt-16">
             <h1 className="text-4xl font-bold text-white">Minted Variations</h1>
             <div className="gap-4 grid grid-cols-2 sm:grid-cols-4">
-            {inscriptions.map((item, index) => (
+            { isLoading
+             ? <SkeletonCardGroup count={10} />
+                : inscriptions.map((item, index) => (
                 <Card shadow="sm" key={index} className="bg-black">
                 <CardBody className="overflow-visible p-0">
                     <Image

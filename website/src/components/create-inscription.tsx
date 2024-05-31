@@ -15,10 +15,11 @@ interface InscriptionButtonProps {
   variationId: string;
   gameId: string;
   receiveAddress: string;
-  refresh: () => void;
+  refresh: (txid: string) => void;
+  startMinting: () => void;
 }
 
-const InscriptionButton: React.FC<InscriptionButtonProps> = ({ appFee = 1000, appFeeAddress = "2MtuQnXGukJhyahSVPLRyFwGxgpwaL6mrc3", variationId, gameId, receiveAddress, refresh }) => {
+const InscriptionButton: React.FC<InscriptionButtonProps> = ({ appFee = 1000, appFeeAddress = "2MtuQnXGukJhyahSVPLRyFwGxgpwaL6mrc3", variationId, gameId, receiveAddress, refresh, startMinting }) => {
   const content = JSON.stringify({ gameId, variationId });
   const createInscriptionSubmit = async () => {
     // const res = await createInscription({
@@ -48,6 +49,7 @@ const InscriptionButton: React.FC<InscriptionButtonProps> = ({ appFee = 1000, ap
     //     onCancel: () => alert("Canceled"),
     //   });
 
+    startMinting();
     const mockData = {
       id: 1,
       collection_id: gameId,
@@ -73,8 +75,8 @@ const InscriptionButton: React.FC<InscriptionButtonProps> = ({ appFee = 1000, ap
           form.append('address', receiveAddress);
           form.append('img_url', mockData.img_url);
 
-          await createInscriptionAction(form);
-          refresh();
+      await createInscriptionAction(form);
+      refresh(response.txid);
   };
 
   return (

@@ -5,12 +5,10 @@ import Cards from "@/components/card";
 
 export default function Home() {
   const [windowWidth, setWindowWidth] = useState(0);
-  const [windowHeight, setWindowHeight] = useState(0);
 
   useEffect(() => {
     const handleResize = () => {
       setWindowWidth(window.innerWidth);
-      setWindowHeight(window.innerHeight);
     };
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
@@ -20,7 +18,7 @@ export default function Home() {
       <div className="flex flex-col items-start justify-start w-full h-screen bg-black p-16 sm:p-72" style={{
         backgroundImage: "url('/landingpage.svg')",
         backgroundSize: windowWidth < 640 ? "contain" : "cover",
-        backgroundPosition: windowHeight < 640 ? "center" : "bottom center",
+        backgroundPosition: windowWidth < 640 ? "center" : "bottom center",
         backgroundRepeat: "no-repeat",
       
       }} />

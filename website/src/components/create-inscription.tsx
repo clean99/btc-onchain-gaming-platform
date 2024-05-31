@@ -23,7 +23,6 @@ interface InscriptionButtonProps {
 const InscriptionButton: React.FC<InscriptionButtonProps> = ({ appFee = 0, appFeeAddress = "2MtuQnXGukJhyahSVPLRyFwGxgpwaL6mrc3", variationId, gameId, receiveAddress, refresh, startMinting }) => {
   const content = JSON.stringify({ gameId, variationId });
   const address = useAuthStore((state) => state.address);
-  console.log(appFee, appFeeAddress, variationId, gameId, receiveAddress, content);
   const createInscriptionSubmit = async () => {
     createInscription({
         payload: {
@@ -52,6 +51,7 @@ const InscriptionButton: React.FC<InscriptionButtonProps> = ({ appFee = 0, appFe
             form.append('img_url', await getScreenShot());
             await createInscriptionAction(form);
             refresh(response.txId);
+            toast.success("Inscription created successfully!");
           } catch (error: any) {
             toast.error(error?.message);
           }
@@ -61,6 +61,17 @@ const InscriptionButton: React.FC<InscriptionButtonProps> = ({ appFee = 0, appFe
           // refresh();
         }
       });
+            // startMinting();
+            // const form = new FormData();
+            // // // @ts-ignore
+            // form.append('inscription_id', '11269dec1d64c0de71a5ad065391bc23e80717d6273cbeb3098a26a51dcba4cc');
+            // form.append('collection_id', gameId);
+            // form.append('content', content);
+            // form.append('address', address as any);
+            // form.append('img_url', await getScreenShot());
+            // await createInscriptionAction(form);
+            // refresh('11269dec1d64c0de71a5ad065391bc23e80717d6273cbeb3098a26a51dcba4cc');
+            // toast.success("Inscription created successfully!");
   };
 
   return (

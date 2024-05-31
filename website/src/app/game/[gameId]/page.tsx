@@ -93,12 +93,12 @@ export default function Page({ params : {gameId} }: { params: { gameId: string }
         </>} isOpen={isOpen} onOpenChange={onOpenChange} />
         
         {/* description */}
-        <div className="flex gap-12 w-full flex-col lg:flex-row justify-between flex-wrap">
+        <div className="flex gap-12 w-full flex-col lg:flex-row justify-between flex-wrap items-center md:items-start">
             {/* game photo */}
             <div>
-            <div className="flex flex-col h-[350px] w-[350px] md:min-h[350px] md:min-w[350px] lg:min-h-[500px] lg:min-w-[500px]">
+            <div className="flex flex-col">
                  {/* @ts-ignore */}
-                <iframe srcDoc={gameHtml} ref={iframeRef} className="h-[348px] w-[348px] border-white border-2 rounded-lg" />
+                <iframe srcDoc={gameHtml} ref={iframeRef} className="h-[360px] w-[360px] lg:h-[600px] lg:w-[600px] border-white border-2 rounded-lg" />
                 
             </div>
             <div className="flex flex-row justify-between">

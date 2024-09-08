@@ -50,16 +50,27 @@ export default function Page({ params : {gameId} }: { params: { gameId: string }
         e.stopPropagation();
         };
 
+        const handleKeyDown = (event: any) => {
+            const key = event.key;
+            if (key === 'ArrowUp' || key === 'ArrowDown' || key === 'ArrowLeft' || key === 'ArrowRight') {
+              event.preventDefault();
+              event.stopPropagation();
+            }
+        };
+      
+        window.addEventListener('keydown', handleKeyDown);
+
         // Add event listeners to the parent document
-        document.addEventListener('keydown', stopPropagation, true);
-        document.addEventListener('keyup', stopPropagation, true);
-        document.addEventListener('keypress', stopPropagation, true);
+        window.addEventListener('keydown', stopPropagation, true);
+        window.addEventListener('keyup', stopPropagation, true);
+        window.addEventListener('keypress', stopPropagation, true);
 
         // Ensure cleanup on component unmount
         return () => {
-        document.removeEventListener('keydown', stopPropagation, true);
-        document.removeEventListener('keyup', stopPropagation, true);
-        document.removeEventListener('keypress', stopPropagation, true);
+        window.removeEventListener('keydown', stopPropagation, true);
+        window.removeEventListener('keyup', stopPropagation, true);
+        window.removeEventListener('keypress', stopPropagation, true);
+        window.removeEventListener('keydown', handleKeyDown);
         };
     }, []);
 
@@ -78,6 +89,7 @@ export default function Page({ params : {gameId} }: { params: { gameId: string }
         fetchCollection(gameId).then(setCollection);
         fetchInscriptions(gameId).then(setInscriptions).finally(() => setIsLoading(false));
     }, [gameId, refreshSignal]);
+    
 
     if(isLoading) {
         return <div className="flex flex-col items-center w-full h-screen bg-black p-4 sm:p-16">

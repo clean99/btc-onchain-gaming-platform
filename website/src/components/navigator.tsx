@@ -1,6 +1,6 @@
 'use client'
 import React from "react";
-import { Navbar, NavbarContent, NavbarItem } from "@nextui-org/react";
+import { Navbar, NavbarContent, NavbarItem, Tooltip } from "@nextui-org/react";
 import { Logo } from "@/components/logo";
 import { usePathname, useRouter } from "next/navigation";
 import AddressButton from "./profile";
@@ -12,7 +12,7 @@ export default function Navigator() {
      const router = useRouter();
      const { address } =
       useUnisatWallet();
-
+     const connected = !!address;
       console.log(address, 'address');
   return (
     <Navbar maxWidth="full" className="bg-black border-white" isBordered>
@@ -27,9 +27,15 @@ export default function Navigator() {
           </a>
         </NavbarItem>
         <NavbarItem isActive={pathname === "/gallery"}>
-          <a onClick={() => router.push("/gallery")} style={{color: 'white', cursor: address ? 'pointer' : 'default', pointerEvents: address ? 'auto' : 'none'}}>
-            Gallery
-          </a>
+          
+            <a 
+              onClick={() => router.push("/gallery")} 
+              style={{color: connected ? 'white' : 'grey', cursor: connected ? 'pointer' : 'default'}}
+            >
+              <Tooltip content="Please login first!" color="foreground" isDisabled={connected}>
+                Gallery
+              </Tooltip>
+            </a>
         </NavbarItem>
         <NavbarItem isActive={pathname === "/leaderboard"} aria-disabled>
           <a style={{color: 'grey'}}>

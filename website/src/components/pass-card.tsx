@@ -33,7 +33,7 @@ export default function PassCard() {
                 width="100%"
                 alt={collection.name}
                 className="w-full object-cover"
-                src={`/game/${collection.id}.png`}
+                src={`/game/6c43433d861400abcbc848635db53f33a740eb30aff6bc7733937f5c09356191i0.png`}
                 />
             </CardBody>
             </Card>

@@ -14,6 +14,13 @@ export default function Navigator() {
       useUnisatWallet();
      const connected = !!address;
       console.log(address, 'address');
+
+    // Redirect to "/" if not connected and pathname is not "/"
+    React.useEffect(() => {
+      if (!connected && pathname !== "/") {
+        router.push("/");
+      }
+    }, [connected, pathname, router]);
   return (
     <Navbar maxWidth="full" className="bg-black border-white" isBordered>
       <NavbarContent>
@@ -29,7 +36,7 @@ export default function Navigator() {
         <NavbarItem isActive={pathname === "/gallery"}>
           
             <a 
-              onClick={() => router.push("/gallery")} 
+              onClick={() => connected && router.push("/gallery")} 
               style={{color: connected ? 'white' : 'grey', cursor: connected ? 'pointer' : 'default'}}
             >
               <Tooltip content="Please login first!" color="foreground" isDisabled={connected}>

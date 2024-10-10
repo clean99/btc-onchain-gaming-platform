@@ -1,41 +1,43 @@
 "use client";
 import React from "react";
-import {Navbar, NavbarContent, NavbarItem, Link} from "@nextui-org/react";
+import {Navbar, NavbarContent, NavbarItem} from "@nextui-org/react";
 import { Logo } from "@/components/logo";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import AddressButton from "./profile";
-import { useAuthStore } from "@/states/auth";
+import { useReactWalletStore } from "btc-connect/dist/react";
 
 export default function Navigator() {
     // get url path to determine which link is active
      const pathname = usePathname();
-    const [address] = useAuthStore((state) => [state.address]);
+     const router = useRouter();
+     const { address } =
+      useReactWalletStore((state) => state);
   return (
     <Navbar maxWidth="full" className="bg-black border-white" isBordered>
       <NavbarContent>
-      <div className="mr-6 cursor-pointer" onClick={() => {window.location.href = "/";}}>
+      <div className="mr-6 cursor-pointer" onClick={() => router.push("/")}>
         <Logo />
       </div>
       <NavbarContent className="hidden sm:flex gap-12" justify='start'>
         <NavbarItem isActive={pathname === "/"}>
-          <Link color="foreground" href="/">
+          <a onClick={() => router.push("/")} style={{color: 'white', cursor: 'pointer'}}>
             CURATION
-          </Link>
+          </a>
         </NavbarItem>
         <NavbarItem isActive={pathname === "/gallery"}>
-          <Link href="/gallery" color="foreground" isDisabled={!address}>
+          <a onClick={() => router.push("/gallery")} style={{color: 'white', cursor: address ? 'pointer' : 'default', pointerEvents: address ? 'auto' : 'none'}}>
             Gallery
-          </Link>
+          </a>
         </NavbarItem>
-        <NavbarItem isActive={pathname === "/leaderboard"} >
-          <Link href="/leaderboard" color="foreground" isDisabled>
+        <NavbarItem isActive={pathname === "/leaderboard"} aria-disabled>
+          <a style={{color: 'grey'}}>
             LEADER BOARD
-          </Link>
+          </a>
         </NavbarItem>
         <NavbarItem isActive={pathname === "/create"}>
-          <Link color="foreground" href="/create" isDisabled>
+          <a style={{color: 'grey'}}>
             CREATE
-          </Link>
+          </a>
         </NavbarItem>
       </NavbarContent>
       </NavbarContent>

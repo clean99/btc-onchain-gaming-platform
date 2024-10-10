@@ -9,6 +9,7 @@ import { useGameHtml } from "@/hooks/useGameHtml";
 import { useAuthStore } from "@/states/auth";
 import { Collection, GameStatus, Inscription } from "@/types";
 import { Button, Card, CardBody, CardFooter, Progress, Spinner, useDisclosure } from "@nextui-org/react"
+import { useReactWalletStore } from "btc-connect/dist/react";
 import Image from "next/image"
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
@@ -26,7 +27,8 @@ export default function Page({ params : {gameId} }: { params: { gameId: string }
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const gameHtml = useGameHtml(gameId, currentInscriptionId);
     const iframeRef = useRef(null);
-    const [address] = useAuthStore((state) => [state.address, state.setAddress]);
+    const { address } =
+        useReactWalletStore((state) => state);
 
 
     const refresh = (txid?: string) => {

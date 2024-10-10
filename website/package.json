@@ -11,6 +11,7 @@
   "dependencies": {
     "@nextui-org/react": "^2.3.6",
     "@vercel/postgres": "^0.8.0",
+    "btc-connect": "^1.5.5",
     "crypto": "^1.0.1",
     "framer-motion": "^11.1.9",
     "html2canvas": "^1.4.1",

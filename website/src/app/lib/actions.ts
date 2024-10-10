@@ -1,7 +1,6 @@
 'use server';
-import { Inscription } from '@/types';
+import { Collection, Inscription } from '@/types';
 import { sql } from '@vercel/postgres';
-
 
 export async function createInscriptionAction(data: FormData) {
     const rowDataFromForm = {
@@ -11,8 +10,6 @@ export async function createInscriptionAction(data: FormData) {
         address: data.get('address'),
         img_url: data.get('img_url'),
     }
-
-    console.log('rowDataFromForm', rowDataFromForm);
 
     if(!rowDataFromForm.address || !rowDataFromForm.inscription_id || !rowDataFromForm.collection_id || !rowDataFromForm.content) {
         throw new Error('Missing required fields');
@@ -26,7 +23,6 @@ export async function createInscriptionAction(data: FormData) {
             RETURNING id
         `;
 
-        console.log(result);
     } catch (error) {
         console.error('Database error:', error);
     }
@@ -40,3 +36,29 @@ export const fetchMineInscriptions = async (address: string) => {
 
     return result.rows as Inscription[];
 }
+
+export const fetchAllCollections = async (): Promise<Collection[]> => {
+    try {
+        const result = await sql`
+            SELECT 
+                id, 
+                collection_id, 
+                name, 
+                description, 
+                img_url, 
+                author, 
+                price, 
+                status, 
+                number, 
+                homepage, 
+                game_url 
+            FROM collection
+        `;
+
+        return result.rows as Collection[];
+    } catch (error) {
+        console.error('Error fetching collections:', error);
+        throw error;
+    }
+}
+

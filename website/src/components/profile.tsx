@@ -5,7 +5,7 @@ import { useReactWalletStore, WalletConnectReact } from 'btc-connect/dist/react'
 import 'btc-connect/dist/style/index.css';
 
 const AddressButton = () => {
-  const { disconnect, address, setModalVisible } = useReactWalletStore();
+  const { disconnect, address } = useReactWalletStore();
 
   return (<div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', width: '180px'}}>
     {

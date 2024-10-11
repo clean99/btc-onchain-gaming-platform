@@ -4,7 +4,7 @@ import { Navbar, NavbarContent, NavbarItem, Tooltip } from "@nextui-org/react";
 import { Logo } from "@/components/logo";
 import { usePathname, useRouter } from "next/navigation";
 import AddressButton from "./profile";
-import useUnisatWallet from "@/hooks/useUnisatWallet";
+import { useUnisatWallet } from "@/hooks/UnisatWalletContext";
 
 const Navigator = () => {
     // get url path to determine which link is active

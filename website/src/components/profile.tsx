@@ -1,7 +1,7 @@
 'use client'
 import {Button, Dropdown, DropdownTrigger, DropdownMenu, DropdownItem} from "@nextui-org/react";
 import {ChevronDownIcon} from './down-arrow';
-import useUnisatWallet from "@/hooks/useUnisatWallet";
+import { useUnisatWallet } from "@/hooks/UnisatWalletContext";
 
 const AddressButton = () => {
   const { disconnect, address, connect } = useUnisatWallet();

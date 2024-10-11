@@ -4,8 +4,8 @@ import { NextUIProvider } from "@nextui-org/react";
 import Navigator from "@/components/navigator";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
 import localFont from 'next/font/local';
+import { UnisatWalletProvider } from "@/hooks/UnisatWalletContext";
 
 // Font files can be colocated inside of `app`
 const myFont = localFont({
@@ -27,11 +27,13 @@ export default function RootLayout({
   return (
     <html lang="en" className={myFont.className}>
       <body>
+      <UnisatWalletProvider>
         <NextUIProvider>
           <ToastContainer position="top-center" theme="dark" />
           <Navigator />
           {children}
         </NextUIProvider>
+        </UnisatWalletProvider>
       </body>
     </html>
   );

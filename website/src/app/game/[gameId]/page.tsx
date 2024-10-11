@@ -5,7 +5,7 @@ import { InscriptionIdLink } from "@/components/inscriptionid-link";
 import { MintLoadingDrawer } from "@/components/mint-loading-drawer";
 import { RECEIVE_ADDRESS } from "@/constants";
 import { useGameHtml } from "@/hooks/useGameHtml";
-import useUnisatWallet from "@/hooks/useUnisatWallet";
+import { useUnisatWallet } from "@/hooks/UnisatWalletContext";
 import { Collection, GameStatus, Inscription } from "@/types";
 import { Button, Card, CardBody, CardFooter, Progress, Spinner, useDisclosure } from "@nextui-org/react"
 import Image from "next/image"

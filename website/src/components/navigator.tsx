@@ -12,6 +12,8 @@ export default function Navigator() {
      const router = useRouter();
      const { address } =
       useUnisatWallet();
+
+      console.log(address, 'address');
   return (
     <Navbar maxWidth="full" className="bg-black border-white" isBordered>
       <NavbarContent>

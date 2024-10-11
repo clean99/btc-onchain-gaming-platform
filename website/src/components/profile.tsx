@@ -5,7 +5,7 @@ import useUnisatWallet from "@/hooks/useUnisatWallet";
 
 const AddressButton = () => {
   const { disconnect, address, connect } = useUnisatWallet();
-
+  console.log('useUnisatWallet', address);
   return (<div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', width: '180px'}}>
     {
         address ? (

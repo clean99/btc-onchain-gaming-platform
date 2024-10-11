@@ -4,7 +4,7 @@ import { toast } from 'react-toastify';
 
 const useUnisatWallet = () => {
   const [address, setAddress] = useState<string | null>(null);
-
+    console.log('useUnisatWallet', address);
   const disconnect = () => {
     setAddress(null);
   }

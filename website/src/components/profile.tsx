@@ -1,7 +1,8 @@
 "use client";
 import {Button, Dropdown, DropdownTrigger, DropdownMenu, DropdownItem} from "@nextui-org/react";
 import {ChevronDownIcon} from './down-arrow';
-import { useReactWalletStore } from 'btc-connect/dist/react';
+import { useReactWalletStore, WalletConnectReact } from 'btc-connect/dist/react';
+import 'btc-connect/dist/style/index.css';
 
 const AddressButton = () => {
   const { disconnect, address, setModalVisible } = useReactWalletStore();
@@ -33,9 +34,13 @@ const AddressButton = () => {
         </DropdownMenu>
       </Dropdown>
           ) : (
-            <Button onClick={() => setModalVisible(true)} className="w-full">
-              Connect Wallet
-            </Button>
+            <WalletConnectReact
+              config={{
+                network: 'livenet',
+                defaultConnectorId: 'okx',
+              }}
+              theme="dark"
+            />
           )
     }
   </div>)

@@ -5,6 +5,25 @@ import { toast } from 'react-toastify';
 const useUnisatWallet = () => {
   const [address, setAddress] = useState<string | null>(null);
 
+  const disconnect = () => {
+    setAddress(null);
+  }
+
+  const connect = async () => {
+    try {
+        // @ts-ignore
+      const accounts = await window?.unisat?.getAccounts?.();
+      if (accounts.length === 0) {
+        // @ts-ignore
+        const accounts = await window?.unisat?.requestAccounts?.();
+      }
+      setAddress(accounts[0]);
+    } catch (error) {
+      console.error('Error interacting with Unisat Wallet:', error);
+      toast.error('An error occurred while interacting with Unisat Wallet.');
+    }
+  }
+
   useEffect(() => {
     const checkUnisatWallet = async () => {
         if (typeof window === "undefined") {
@@ -27,7 +46,7 @@ const useUnisatWallet = () => {
         // @ts-ignore
         const accounts = await window.unisat?.getAccounts?.();
         if (accounts.length === 0) {
-          toast.error('Please login to your Unisat Wallet.');
+          connect();
         } else {
           setAddress(accounts[0]);
         }
@@ -39,25 +58,6 @@ const useUnisatWallet = () => {
 
     checkUnisatWallet();
   }, []);
-
-  const disconnect = () => {
-    setAddress(null);
-  }
-
-  const connect = async () => {
-    try {
-        // @ts-ignore
-      const accounts = await window?.unisat?.getAccounts?.();
-      if (accounts.length === 0) {
-        // @ts-ignore
-        const accounts = await window?.unisat?.requestAccounts?.();
-      }
-      setAddress(accounts[0]);
-    } catch (error) {
-      console.error('Error interacting with Unisat Wallet:', error);
-      toast.error('An error occurred while interacting with Unisat Wallet.');
-    }
-  }
 
   return {
     address,

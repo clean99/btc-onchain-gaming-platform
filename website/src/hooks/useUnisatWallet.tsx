@@ -11,6 +11,7 @@ const useUnisatWallet = () => {
             // Client-side-only code
             return;
         }
+        // @ts-ignore
       if (typeof window.unisat === 'undefined') {
         toast.error('Please install the Unisat Wallet.');
         return;

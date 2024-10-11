@@ -1,4 +1,4 @@
-"use client";
+'use client'
 import React, { useEffect, useRef } from "react";
 import { useGameHtml } from "@/hooks/useGameHtml";
 import { InscriptionIdLink } from "@/components/inscriptionid-link";

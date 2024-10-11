@@ -1,4 +1,4 @@
-"use client";
+'use client'
 import { Button, Card, CardBody, CardFooter, Progress } from "@nextui-org/react"
 import Image from "next/image"
 

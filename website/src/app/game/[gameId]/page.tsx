@@ -1,15 +1,13 @@
-"use client";
+'use client'
 import { fetchCollection, fetchInscriptions } from "@/app/lib/data";
 import InscriptionButton from "@/components/create-inscription";
 import { InscriptionIdLink } from "@/components/inscriptionid-link";
 import { MintLoadingDrawer } from "@/components/mint-loading-drawer";
-import { SkeletonCardGroup } from "@/components/skeleton";
-import { MANIC_INSCRIPTION_ID, RECEIVE_ADDRESS } from "@/constants";
+import { RECEIVE_ADDRESS } from "@/constants";
 import { useGameHtml } from "@/hooks/useGameHtml";
-import { useAuthStore } from "@/states/auth";
+import useUnisatWallet from "@/hooks/useUnisatWallet";
 import { Collection, GameStatus, Inscription } from "@/types";
 import { Button, Card, CardBody, CardFooter, Progress, Spinner, useDisclosure } from "@nextui-org/react"
-import { useReactWalletStore } from "btc-connect/dist/react";
 import Image from "next/image"
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
@@ -27,8 +25,7 @@ export default function Page({ params : {gameId} }: { params: { gameId: string }
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const gameHtml = useGameHtml(gameId, currentInscriptionId);
     const iframeRef = useRef(null);
-    const { address } =
-        useReactWalletStore((state) => state);
+    const { address } = useUnisatWallet();
 
 
     const refresh = (txid?: string) => {

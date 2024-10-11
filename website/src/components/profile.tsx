@@ -1,11 +1,10 @@
-"use client";
+'use client'
 import {Button, Dropdown, DropdownTrigger, DropdownMenu, DropdownItem} from "@nextui-org/react";
 import {ChevronDownIcon} from './down-arrow';
-import { useReactWalletStore, WalletConnectReact } from 'btc-connect/dist/react';
-import 'btc-connect/dist/style/index.css';
+import useUnisatWallet from "@/hooks/useUnisatWallet";
 
 const AddressButton = () => {
-  const { disconnect, address } = useReactWalletStore();
+  const { disconnect, address, connect } = useUnisatWallet();
 
   return (<div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', width: '180px'}}>
     {
@@ -34,13 +33,9 @@ const AddressButton = () => {
         </DropdownMenu>
       </Dropdown>
           ) : (
-            <WalletConnectReact
-              config={{
-                network: 'livenet',
-                defaultConnectorId: 'okx',
-              }}
-              theme="dark"
-            />
+            <Button onClick={connect} className="w-full">
+              Connect
+            </Button>
           )
     }
   </div>)

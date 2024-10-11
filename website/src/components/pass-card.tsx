@@ -1,4 +1,4 @@
-"use client";
+'use client'
 import React from "react";
 import {Card, CardBody, CardFooter, Image, Spinner} from "@nextui-org/react";
 import { useRouter } from "next/navigation";

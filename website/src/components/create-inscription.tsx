@@ -1,4 +1,4 @@
-"use client";
+'use client'
 import { createInscriptionAction } from "@/app/lib/actions";
 import { useAuthStore } from "@/states/auth";
 import { getScreenShot } from "@/utils/getScreenShot";

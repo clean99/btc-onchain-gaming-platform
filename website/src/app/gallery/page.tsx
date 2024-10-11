@@ -1,17 +1,15 @@
-"use client";
+'use client'
 import React from "react";
 import { Button, Card, CardBody, CardFooter, Spinner } from "@nextui-org/react";
 import Image from "next/image";
 import { redirect, useRouter } from "next/navigation";
-import { Inscription } from "@/types";
 import { toast } from "react-toastify";
-import { useAuthStore } from "@/states/auth";
-import { useReactWalletStore } from "btc-connect/dist/react";
 import { useFractalInscription } from "@/hooks/useFractalInscription";
+import useUnisatWallet from "@/hooks/useUnisatWallet";
 
 export default function Page() {
     const { address } =
-        useReactWalletStore((state) => state);
+        useUnisatWallet();
     const { data: inscriptions, loading: isLoading, error } = useFractalInscription(address ?? '', 0, 16);
     const router = useRouter();
 

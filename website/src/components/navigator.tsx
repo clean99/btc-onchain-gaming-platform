@@ -1,17 +1,17 @@
-"use client";
+'use client'
 import React from "react";
-import {Navbar, NavbarContent, NavbarItem} from "@nextui-org/react";
+import { Navbar, NavbarContent, NavbarItem } from "@nextui-org/react";
 import { Logo } from "@/components/logo";
 import { usePathname, useRouter } from "next/navigation";
 import AddressButton from "./profile";
-import { useReactWalletStore } from "btc-connect/dist/react";
+import useUnisatWallet from "@/hooks/useUnisatWallet";
 
 export default function Navigator() {
     // get url path to determine which link is active
      const pathname = usePathname();
      const router = useRouter();
      const { address } =
-      useReactWalletStore((state) => state);
+      useUnisatWallet();
   return (
     <Navbar maxWidth="full" className="bg-black border-white" isBordered>
       <NavbarContent>

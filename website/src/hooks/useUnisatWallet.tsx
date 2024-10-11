@@ -35,25 +35,12 @@ const useUnisatWallet = () => {
         toast.error('Please install the Unisat Wallet.');
         return;
       }
-
-      try {
-        // @ts-ignore
-        const chain = (await window.unisat?.getChain?.())?.enum;
+      // @ts-ignore
+      const chain = (await window.unisat?.getChain?.())?.enum;
         if (chain !== 'FRACTAL_BITCOIN_TESTNET') {
             // @ts-ignore
-          await window.unisat?.switchChain?.('FRACTAL_BITCOIN_TESTNET');
+            await window.unisat?.switchChain?.('FRACTAL_BITCOIN_TESTNET');
         }
-        // @ts-ignore
-        const accounts = await window.unisat?.getAccounts?.();
-        if (accounts.length === 0) {
-          connect();
-        } else {
-          setAddress(accounts[0]);
-        }
-      } catch (error) {
-        console.error('Error interacting with Unisat Wallet:', error);
-        toast.error('An error occurred while interacting with Unisat Wallet.');
-      }
     };
 
     checkUnisatWallet();

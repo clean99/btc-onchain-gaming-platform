@@ -6,7 +6,7 @@ import { usePathname, useRouter } from "next/navigation";
 import AddressButton from "./profile";
 import useUnisatWallet from "@/hooks/useUnisatWallet";
 
-export default function Navigator() {
+const Navigator = () => {
     // get url path to determine which link is active
      const pathname = usePathname();
      const router = useRouter();
@@ -71,3 +71,5 @@ export default function Navigator() {
     </Navbar>
   );
 }
+
+export default Navigator;

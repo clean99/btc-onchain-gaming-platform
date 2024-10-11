@@ -29,7 +29,6 @@ export async function createInscriptionAction(data: FormData) {
 }
 
 export const fetchMineInscriptions = async (address: string) => {
-    console.log('address', address);
     const result = await sql`
         SELECT * FROM inscription WHERE address = ${address}
     `;

@@ -12,10 +12,10 @@ const useUnisatWallet = () => {
   const connect = async () => {
     try {
         // @ts-ignore
-      const accounts = await window?.unisat?.getAccounts?.();
+      let accounts = await window?.unisat?.getAccounts?.();
       if (accounts.length === 0) {
         // @ts-ignore
-        const accounts = await window?.unisat?.requestAccounts?.();
+        accounts = await window?.unisat?.requestAccounts?.();
       }
       setAddress(accounts[0]);
     } catch (error) {

@@ -1,44 +1,10 @@
 "use client";
-import { useLocalStorage } from 'usehooks-ts'; 
-import {AddressPurpose, RpcErrorCode, request} from "sats-connect";
 import {Button, Dropdown, DropdownTrigger, DropdownMenu, DropdownItem} from "@nextui-org/react";
 import {ChevronDownIcon} from './down-arrow';
-import WalletIcon from './wallet';
-import { toast } from "react-toastify";
-import { useAuthStore } from '@/states/auth';
-
+import { useReactWalletStore } from 'btc-connect/dist/react';
 
 const AddressButton = () => {
-  const [address, setAddress, removeAddress] = useAuthStore((state) => [state.address, state.setAddress, state.removeAddress]);
-  const connect = async () => {
-    try {
-      const response = await request('getAccounts', {
-        purposes: [AddressPurpose.Payment, AddressPurpose.Ordinals],
-        message: 'Cool app wants to know your addresses!',
-      });
-      console.log("getAccounts ~ response:", response)
-      if (response.status === 'success') {
-        const paymentAddressItem = response.result.find(
-          (address) => address.purpose === AddressPurpose.Payment
-        );
-        const ordinalsAddressItem = response.result.find(
-          (address) => address.purpose === AddressPurpose.Ordinals
-        );
-        if(!paymentAddressItem || !ordinalsAddressItem) {
-            throw new Error('Missing address');
-        }
-        setAddress([paymentAddressItem?.address, ordinalsAddressItem?.address]);
-      } else {
-        if (response.error.code === RpcErrorCode.USER_REJECTION) {
-          // handle user cancellation error
-        } else {
-          // handle error
-        }
-      }
-    } catch (err: any) {
-        toast.error(err.error.message);
-    }
-  }
+  const { disconnect, address, setModalVisible } = useReactWalletStore();
 
   return (<div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', width: '180px'}}>
     {
@@ -48,7 +14,7 @@ const AddressButton = () => {
         <DropdownTrigger>
           <Button isIconOnly className="w-full">
              <div className='mr-2'>
-             {address[0].slice(0, 4) + '...' + address[0].slice(-4)}
+             {address.slice(0, 4) + '...' + address.slice(-4)}
              </div>
             <ChevronDownIcon  />
           </Button>
@@ -60,16 +26,16 @@ const AddressButton = () => {
           className="max-w-[160px]"
         >
           <DropdownItem key="merge" onClick={() => {
-            removeAddress();
+            disconnect();
           }}>
             Logout
           </DropdownItem>
         </DropdownMenu>
       </Dropdown>
           ) : (
-            <Button variant="bordered" startContent={
-                <WalletIcon />
-            } onClick={() => connect()}>Connect Address</Button>
+            <Button onClick={() => setModalVisible(true)} className="w-full">
+              Connect Wallet
+            </Button>
           )
     }
   </div>)

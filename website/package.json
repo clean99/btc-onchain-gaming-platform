@@ -11,6 +11,7 @@
   "dependencies": {
     "@nextui-org/react": "^2.3.6",
     "@vercel/postgres": "^0.8.0",
+    "btc-connect": "^1.5.5",
     "crypto": "^1.0.1",
     "framer-motion": "^11.1.9",
     "html2canvas": "^1.4.1",
@@ -29,9 +30,11 @@
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "@types/uuid": "^9.0.8",
+    "css-loader": "^7.1.2",
     "eslint": "^8",
     "eslint-config-next": "14.2.3",
     "postcss": "^8",
+    "style-loader": "^4.0.0",
     "tailwindcss": "^3.4.1",
     "typescript": "^5"
   }

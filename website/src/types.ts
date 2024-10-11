@@ -17,10 +17,7 @@ export interface Collection {
 }
 
 export interface Inscription {
-    id: number;
     collection_id: string;
     inscription_id: string;
-    content: Record<string, string>;
-    address: string;
     img_url: string;
 }

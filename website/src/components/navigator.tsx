@@ -11,9 +11,14 @@ export default function Navigator() {
      const pathname = usePathname();
      const router = useRouter();
      const { address } = useUnisatWallet();
-     
+     const [isConnected, setIsConnected] = React.useState<boolean>(false);
      React.useEffect(() => {
       console.log(address, 'address');
+      setInterval(() => {
+        console.log(address, 'address');
+        setIsConnected(!isConnected);
+        console.log(isConnected, 'isConnected');
+      }, 1000);
     }, [address]);
       console.log(address, 'address');
 

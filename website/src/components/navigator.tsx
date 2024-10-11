@@ -10,17 +10,19 @@ export default function Navigator() {
     // get url path to determine which link is active
      const pathname = usePathname();
      const router = useRouter();
-     const { address } =
-      useUnisatWallet();
-     const connected = !!address;
+     const { address } = useUnisatWallet();
+     
+     React.useEffect(() => {
+      console.log(address, 'address');
+    }, [address]);
       console.log(address, 'address');
 
     // Redirect to "/" if not connected and pathname is not "/"
     React.useEffect(() => {
-      if (!connected && pathname !== "/") {
+      if (!address && pathname !== "/") {
         router.push("/");
       }
-    }, [connected, pathname, router]);
+    }, [address, pathname, router]);
   return (
     <Navbar maxWidth="full" className="bg-black border-white" isBordered>
       <NavbarContent>
@@ -36,10 +38,10 @@ export default function Navigator() {
         <NavbarItem isActive={pathname === "/gallery"}>
           
             <a 
-              onClick={() => connected && router.push("/gallery")} 
-              style={{color: connected ? 'white' : 'grey', cursor: connected ? 'pointer' : 'default'}}
+              onClick={() => address && router.push("/gallery")} 
+              style={{color: address ? 'white' : 'grey', cursor: address ? 'pointer' : 'default'}}
             >
-              <Tooltip content="Please login first!" color="foreground" isDisabled={connected}>
+              <Tooltip content="Please login first!" color="foreground" isDisabled={!!address}>
                 Gallery
               </Tooltip>
             </a>

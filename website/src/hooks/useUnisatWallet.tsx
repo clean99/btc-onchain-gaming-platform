@@ -11,12 +11,8 @@ const useUnisatWallet = () => {
 
   const connect = async () => {
     try {
-        // @ts-ignore
-      let accounts = await window?.unisat?.getAccounts?.();
-      if (accounts.length === 0) {
-        // @ts-ignore
-        accounts = await window?.unisat?.requestAccounts?.();
-      }
+      // @ts-ignore
+      const accounts = await window?.unisat?.requestAccounts?.();
       setAddress(accounts[0]);
     } catch (error) {
       console.error('Error interacting with Unisat Wallet:', error);

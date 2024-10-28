@@ -4,6 +4,7 @@ import {Card, CardBody, CardFooter, Image, Spinner} from "@nextui-org/react";
 import { useRouter } from "next/navigation";
 import { fetchCollections } from "@/app/lib/data";
 import { Collection, GameStatus } from "@/types";
+import { isPasscard } from "@/utils/utils";
 
 export default function PassCard() {
     const router = useRouter();
@@ -11,7 +12,7 @@ export default function PassCard() {
     const [isLoading, setIsLoading] = React.useState<boolean>(true);
     React.useEffect(() => {
         fetchCollections().then((collections) => {
-            const passcard = collections.find((item) => item.name === 'Passcard');
+            const passcard = collections.find((item) => isPasscard(item));
             setCollection(passcard);
         }).finally(() => setIsLoading(false));
     }, []);

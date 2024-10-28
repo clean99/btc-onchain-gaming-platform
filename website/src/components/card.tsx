@@ -4,6 +4,7 @@ import {Card, CardBody, CardFooter, Image, Spinner} from "@nextui-org/react";
 import { useRouter } from "next/navigation";
 import { fetchCollections } from "@/app/lib/data";
 import { Collection, GameStatus } from "@/types";
+import { isPasscard } from "@/utils/utils";
 
 export default function Cards() {
     const router = useRouter();
@@ -20,7 +21,7 @@ export default function Cards() {
         <div className="gap-2 grid grid-cols-2 sm:grid-cols-4">
         {isLoading 
             ? <Spinner />
-            : collections.map((item: Collection, index: number) => (
+            : collections.filter((item: Collection) => !isPasscard(item)).map((item: Collection, index: number) => (
             <Card shadow="sm" key={index} isPressable={item.status !== GameStatus.Pending} onPress={() => {
                 router.push("/game/" + item.collection_id);
             }}>

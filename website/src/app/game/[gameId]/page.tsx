@@ -24,9 +24,8 @@ export default function Page({ params : {gameId} }: { params: { gameId: string }
     const [txid, setTxid] = useState<string>('');
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const gameHtml = useGameHtml(gameId, currentInscriptionId);
-    const iframeRef = useRef(null);
+    const iframeRef = useRef<HTMLIFrameElement | null>(null);
     const { address } = useUnisatWallet();
-
 
     const refresh = (txid?: string) => {
         setIsLoading(true);
@@ -42,48 +41,39 @@ export default function Page({ params : {gameId} }: { params: { gameId: string }
         setIsMinting(true);
         onOpen();
     }
-
+   
     useEffect(() => {
-        // Function to stop propagation of keyboard events on the parent page
-        const stopPropagation = (e: KeyboardEvent) => {
-        e.stopPropagation();
+        const handleFocus = () => {
+            document.body.style.overflow = 'hidden';
         };
 
-        const handleKeyDown = (event: any) => {
-            const key = event.key;
-            if (key === 'ArrowUp' || key === 'ArrowDown' || key === 'ArrowLeft' || key === 'ArrowRight') {
-              event.preventDefault();
-              event.stopPropagation();
-            }
+        const handleBlur = () => {
+            document.body.style.overflow = '';
         };
-      
-        window.addEventListener('keydown', handleKeyDown);
 
-        // Add event listeners to the parent document
-        window.addEventListener('keydown', stopPropagation, true);
-        window.addEventListener('keyup', stopPropagation, true);
-        window.addEventListener('keypress', stopPropagation, true);
-
-        // Ensure cleanup on component unmount
-        return () => {
-        window.removeEventListener('keydown', stopPropagation, true);
-        window.removeEventListener('keyup', stopPropagation, true);
-        window.removeEventListener('keypress', stopPropagation, true);
-        window.removeEventListener('keydown', handleKeyDown);
-        };
-    }, []);
-
-    useEffect(() => {
-        // Focus the iframe to ensure it receives keyboard events
         const iframe = iframeRef.current;
         if (iframe) {
             // @ts-ignore
-        iframe.onload = () => {
+            iframe.onload = () => {
+                // @ts-ignore
+                iframe.contentWindow.focus();
+            };
             // @ts-ignore
-            iframe.contentWindow.focus();
-        };
+            iframe.contentWindow.addEventListener('focus', handleFocus);
+            // @ts-ignore
+            iframe.contentWindow.addEventListener('blur', handleBlur);
         }
-    }, []);
+
+        return () => {
+            if (iframe) {
+                // @ts-ignore
+                iframe.contentWindow.removeEventListener('focus', handleFocus);
+                // @ts-ignore
+                iframe.contentWindow.removeEventListener('blur', handleBlur);
+            }
+        };
+    }, [iframeRef.current]);
+
     useEffect(() => {
         fetchCollection(gameId).then(setCollection);
         fetchInscriptions(gameId).then(setInscriptions).finally(() => setIsLoading(false));
@@ -107,9 +97,9 @@ export default function Page({ params : {gameId} }: { params: { gameId: string }
         <div className="flex gap-12 w-full flex-col lg:flex-row justify-between flex-wrap items-center md:items-start">
             {/* game photo */}
             <div>
-            <div className="flex flex-col">
+            <div className="flex flex-col overflow-hidden">
                  {/* @ts-ignore */}
-                <iframe srcDoc={gameHtml} ref={iframeRef} className="h-[360px] w-[360px] lg:h-[600px] lg:w-[600px] border-white border-2 rounded-lg" />
+                <iframe srcDoc={gameHtml} ref={iframeRef} className="h-[360px] w-[360px] lg:h-[600px] lg:w-[600px] border-white border-2 rounded-lg overflow-hidden" />
                 
             </div>
             <div className="flex flex-row justify-between">
@@ -139,9 +129,9 @@ export default function Page({ params : {gameId} }: { params: { gameId: string }
                 <div className="text-white max-w-[500px] lg:max-w-[680px]">
                     Description: {collection?.description}
                 </div>
-                <div className="text-white">
+                {/* <div className="text-white">
                     Homepage: <a href={collection?.homepage} target="_blank" rel="noreferrer">{collection?.homepage}</a>
-                </div>
+                </div> */}
             </div>
             
         </div>

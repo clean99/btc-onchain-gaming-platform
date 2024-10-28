@@ -6,25 +6,38 @@ import { InscriptionIdLink } from "@/components/inscriptionid-link";
 export default function Page({ params }: { params: { gameId: string, variationId: string } }) {
     const gameHtml = useGameHtml(params.gameId, params.variationId);
     const iframeRef = useRef(null);
+    useEffect(() => {
+      const handleFocus = () => {
+          document.body.style.overflow = 'hidden';
+      };
 
-  useEffect(() => {
-    // Function to stop propagation of keyboard events on the parent page
-    const stopPropagation = (e: KeyboardEvent) => {
-      e.stopPropagation();
-    };
+      const handleBlur = () => {
+          document.body.style.overflow = '';
+      };
 
-    // Add event listeners to the parent document
-    document.addEventListener('keydown', stopPropagation, true);
-    document.addEventListener('keyup', stopPropagation, true);
-    document.addEventListener('keypress', stopPropagation, true);
+      const iframe = iframeRef.current;
+      if (iframe) {
+          // @ts-ignore
+          iframe.onload = () => {
+              // @ts-ignore
+              iframe.contentWindow.focus();
+          };
+          // @ts-ignore
+          iframe.contentWindow.addEventListener('focus', handleFocus);
+          // @ts-ignore
+          iframe.contentWindow.addEventListener('blur', handleBlur);
+      }
 
-    // Ensure cleanup on component unmount
-    return () => {
-      document.removeEventListener('keydown', stopPropagation, true);
-      document.removeEventListener('keyup', stopPropagation, true);
-      document.removeEventListener('keypress', stopPropagation, true);
-    };
-  }, []);
+      return () => {
+          if (iframe) {
+              // @ts-ignore
+              iframe.contentWindow.removeEventListener('focus', handleFocus);
+              // @ts-ignore
+              iframe.contentWindow.removeEventListener('blur', handleBlur);
+          }
+      };
+  }, [iframeRef.current]);
+
 
   useEffect(() => {
     // Focus the iframe to ensure it receives keyboard events

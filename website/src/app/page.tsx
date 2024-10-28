@@ -35,7 +35,7 @@ export default function Home() {
             PASSCARD
           </h1>
           <div className="text-center text-xl text-white">
-          Minting in September - Stay tuned for fresh gameplay!
+          Minting in November - Stay tuned for fresh gameplay!
           </div>
         </div>
       </div>

@@ -291,11 +291,12 @@ export function useGameHtml(gameId: string, variationId: string) {
         fetch(`/game-script/${gameId}.js`)
         .then((response) => response.text())
         .then((data) => {
-            if(gameId === '6c43433d861400abcbc848635db53f33a740eb30aff6bc7733937f5c09356191i0') {
-                setGameHtml(passCardNewTemplate(variationId, data));
-            } else {
-                setGameHtml(htmlTemplate(variationId.toString().padEnd(66, '0'), data));
-            }
+            setGameHtml(passCardTemplate(variationId.toString().padEnd(66, '0'), data));
+            // if(gameId === '6c43433d861400abcbc848635db53f33a740eb30aff6bc7733937f5c09356191i0') {
+            //     setGameHtml(passCardNewTemplate(variationId, data));
+            // } else {
+            //     setGameHtml(htmlTemplate(variationId.toString().padEnd(66, '0'), data));
+            // }
         });
     }, [gameId, variationId]);
 

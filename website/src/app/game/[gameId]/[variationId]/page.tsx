@@ -39,12 +39,12 @@ export default function Page({ params }: { params: { gameId: string, variationId
   }, []);
 
     return (
-        <div className="flex flex-col items-center w-full h-screen bg-black p-4 sm:p-12">
+        <div className="flex flex-col justify-center items-center w-full h-screen bg-black p-4 sm:p-12">
                 <div className="text-white text-2xl font-bold">
                     TxID: <InscriptionIdLink inscriptionId={params.variationId} />
                 </div>
                   {/* @ts-ignore */}
-                <iframe srcDoc={gameHtml} ref={iframeRef} className="w-full h-full mt-2" />
+                <iframe srcDoc={gameHtml} ref={iframeRef} className="w-full h-full mt-2 max-w-[800px] max-h-[800px]" />
                
             </div>
     );

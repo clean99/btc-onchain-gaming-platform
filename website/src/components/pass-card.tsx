@@ -38,7 +38,7 @@ export default function PassCard() {
                 width="100%"
                 alt={collection.name}
                 className="w-full object-cover"
-                src={`/game/7e3c8997b971a02a1dba99ea8669b1503db19fcc7adf31b4e830c8bfec89e341i0.png`}
+                src={`/game/48c54a857432475daea6fe5da1013525094054e4fc717fd7b38fad1b5611436ai0.png`}
                 />
             </CardBody>
             </Card>

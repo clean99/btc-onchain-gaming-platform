@@ -70,10 +70,10 @@ export const useFractalInscription = (address: string, cursor: number = 0, size:
     const fetchData = async () => {
       try {
         const response = await axios.get<InscriptionResponse>(
-          `https://open-api-fractal-testnet.unisat.io/v1/indexer/address/${address}/inscription-data?cursor=${cursor}&size=${size}`,
+          `https://open-api-fractal.unisat.io/v1/indexer/address/${address}/inscription-data?cursor=${cursor}&size=${size}`,
           {
             headers: {
-              'Authorization': 'Bearer 69ee100b82db27f0df46969fdbaae818a934c64d77a3735aae372252870ceefa',
+              'Authorization': `Bearer ${process.env.NEXT_PUBLIC_BEARER_TOKEN}`,
               'Content-Type': 'application/json'
             }
           }
@@ -85,10 +85,10 @@ export const useFractalInscription = (address: string, cursor: number = 0, size:
         const inscriptionsIds = response.data.data.inscription.map((inscription) => inscription.inscriptionId);
         const fetchInscriptionDetails = async (inscriptionId: string) => {
           try {
-            const response = await axios.get(`https://open-api-fractal-testnet.unisat.io/v1/indexer/inscription/content/${inscriptionId}`,
+            const response = await axios.get(`https://open-api-fractal.unisat.io/v1/indexer/inscription/content/${inscriptionId}`,
                 {
                     headers: {
-                      'Authorization': 'Bearer 69ee100b82db27f0df46969fdbaae818a934c64d77a3735aae372252870ceefa',
+                      'Authorization': `Bearer ${process.env.NEXT_PUBLIC_BEARER_TOKEN}`,
                       'Content-Type': 'application/json'
                     }
                 }

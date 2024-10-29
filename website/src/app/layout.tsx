@@ -6,6 +6,10 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import localFont from 'next/font/local';
 import { UnisatWalletProvider } from "@/hooks/UnisatWalletContext";
+import { loadEnvConfig } from '@next/env'
+ 
+const projectDir = process.cwd()
+loadEnvConfig(projectDir)
 
 // Font files can be colocated inside of `app`
 const myFont = localFont({

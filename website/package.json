@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@next/env": "^15.0.1",
     "@nextui-org/react": "^2.3.6",
     "@vercel/postgres": "^0.8.0",
     "btc-connect": "^1.5.5",

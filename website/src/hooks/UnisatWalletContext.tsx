@@ -29,7 +29,7 @@ export const UnisatWalletProvider: React.FC<ProviderProps> = ({ children }) => {
       setAddress(accounts[0]);
     } catch (error) {
       console.error('Error interacting with Unisat Wallet:', error);
-      toast.error('An error occurred while interacting with Unisat Wallet.');
+      toast.error('Please install latest version of Unisat Wallet.');
     }
   };
 
@@ -41,14 +41,14 @@ export const UnisatWalletProvider: React.FC<ProviderProps> = ({ children }) => {
       }
       // @ts-ignore
       if (typeof window.unisat === 'undefined') {
-        toast.error('Please install the Unisat Wallet.');
+        toast.error('Please install latest version of Unisat Wallet.');
         return;
       }
       // @ts-ignore
       const chain = (await window.unisat?.getChain?.())?.enum;
-      if (chain !== 'FRACTAL_BITCOIN_TESTNET') {
+      if (chain !== 'FRACTAL_BITCOIN') {
         // @ts-ignore
-        await window.unisat?.switchChain?.('FRACTAL_BITCOIN_TESTNET');
+        await window.unisat?.switchChain?.('FRACTAL_BITCOIN');
       }
     };
 

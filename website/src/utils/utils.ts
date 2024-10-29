@@ -19,5 +19,5 @@ function generateUniqueTokens(count: number = 100) {
 }
 
 // Example usage:
-const tokens = generateUniqueTokens(100); // Generate 10 unique tokens
-console.log(tokens);
+// const tokens = generateUniqueTokens(100); // Generate 10 unique tokens
+// console.log(tokens);

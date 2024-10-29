@@ -93,7 +93,10 @@ export const useFractalInscription = (address: string, cursor: number = 0, size:
                     }
                 }
             );
-            return response.data;
+            return {
+              ...response.data,
+              id: inscriptionId,
+            };
           } catch (error) {
             console.error(`Error fetching details for inscription ID ${inscriptionId}:`, error);
             return null;
@@ -101,9 +104,18 @@ export const useFractalInscription = (address: string, cursor: number = 0, size:
         };
 
         const fetchAllInscriptionDetails = async () => {
-          const promises = inscriptionsIds.map(inscriptionId => fetchInscriptionDetails(inscriptionId));
-          const results = await Promise.all(promises);
-          return results.filter(result => result !== null).filter(result => isOurInscription(result));
+          const results = [];
+          for (let i = 0; i < inscriptionsIds.length; i++) {
+            const result = await fetchInscriptionDetails(inscriptionsIds[i]);
+            if (result !== null && isOurInscription(result)) {
+              results.push(result);
+            }
+            // Apply rate limit of 10 requests per second
+            if ((i + 1) % 10 === 0) {
+              await new Promise(resolve => setTimeout(resolve, 1000));
+            }
+          }
+          return results;
         };
 
         const inscriptionDetailsArray = await fetchAllInscriptionDetails();

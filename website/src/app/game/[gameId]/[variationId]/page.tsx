@@ -10,7 +10,7 @@ export default function Page({ params }: { params: { gameId: string, variationId
     return (
         <div className="flex flex-col justify-center items-center w-ful bg-black p-4 sm:p-12" style={{ height: 'calc(100vh - 64px)' }}>
                 <div className="text-white text-2xl font-bold">
-                    TxID: <InscriptionIdLink inscriptionId={params.variationId} />
+                    Inscription ID: <InscriptionIdLink inscriptionId={params.variationId} />
                 </div>
                   {/* @ts-ignore */}
                 <iframe srcDoc={gameHtml} ref={iframeRef} className="w-full h-full mt-2 max-w-[800px] max-h-[800px]" />

@@ -156,7 +156,8 @@ export default function Page({ params : {gameId} }: { params: { gameId: string }
                                         />
                                     </CardBody>
                                     <CardFooter className="text-small justify-start p-0 py-2">
-                                        <Button size="sm" color="primary" variant="light" startContent={<Image src="/play.svg" alt="game icon" width={10} height={10} />} onClick={() => router.push(`/game/${item.collection_id}/${item.inscription_id}`)}>
+                                        {/* @ts-ignore */}
+                                        <Button size="sm" color="primary" variant="light" startContent={<Image src="/play.svg" alt="game icon" width={10} height={10} />} onClick={() => router.push(`/game/${item.collection_id}/${item.id}`)}>
                                             Play
                                         </Button>
                                     </CardFooter>

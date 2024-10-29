@@ -12,23 +12,26 @@ import Image from "next/image"
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { v4 as uuidv4 } from 'uuid';
+import { useFractalInscription } from "@/hooks/useFractalInscription";
+import { useFractalInscriptionByCollectionId } from "@/hooks/useFractalInscriptionByCollectionId";
 
 export default function Page({ params : {gameId} }: { params: { gameId: string } }) {
     const router = useRouter();
     const {isOpen, onOpen, onOpenChange} = useDisclosure();
     const [collection, setCollection] = useState<Collection>();
-    const [inscriptions, setInscriptions] = useState<Inscription[]>([]);
     const [currentInscriptionId, setCurrentInscriptionId] = useState<string>(uuidv4());
     const [refreshSignal, setRefreshSignal] = useState<number>(0);
     const [isMinting, setIsMinting] = useState<boolean>(false);
     const [txid, setTxid] = useState<string>('');
-    const [isLoading, setIsLoading] = useState<boolean>(true);
+    // const [isLoading, setIsLoading] = useState<boolean>(true);
     const gameHtml = useGameHtml(gameId, currentInscriptionId);
     const iframeRef = useRef<HTMLIFrameElement | null>(null);
     const { address } = useUnisatWallet();
-
+    const { data: inscriptions, loading: isLoading } = useFractalInscriptionByCollectionId(gameId, address || '');
+    const inscriptionsLength = 82;
+    const collectionLength = 100;
     const refresh = (txid?: string) => {
-        setIsLoading(true);
+        // setIsLoading(true);
         setCurrentInscriptionId(uuidv4());
         setRefreshSignal(refreshSignal + 1);
         setIsMinting(false);
@@ -67,16 +70,15 @@ export default function Page({ params : {gameId} }: { params: { gameId: string }
         return () => {
             if (iframe) {
                 // @ts-ignore
-                iframe.contentWindow.removeEventListener('focus', handleFocus);
+                iframe.contentWindow?.removeEventListener?.('focus', handleFocus);
                 // @ts-ignore
-                iframe.contentWindow.removeEventListener('blur', handleBlur);
+                iframe.contentWindow?.removeEventListener?.('blur', handleBlur);
             }
         };
     }, [iframeRef.current]);
 
     useEffect(() => {
         fetchCollection(gameId).then(setCollection);
-        fetchInscriptions(gameId).then(setInscriptions).finally(() => setIsLoading(false));
     }, [gameId, refreshSignal]);
     
 
@@ -114,11 +116,11 @@ export default function Page({ params : {gameId} }: { params: { gameId: string }
             <div className="flex flex-col gap-6 flex-grow w-full lg:w-[600px]">
                 <h1 className="text-4xl font-bold text-white">{collection?.name} <span className="text-sm font-light">BY: {collection?.author}</span></h1>
                 <div>
-                 <Progress aria-label="Loading..." value={inscriptions?.length} maxValue={collection?.number} className="max-w-md" size="lg" />
-                 <span className="text-sm font-light text-white">{inscriptions?.length} / {collection?.number} minted</span>
+                 <Progress aria-label="Loading..." value={inscriptionsLength} maxValue={collectionLength} className="max-w-md" size="lg" />
+                 <span className="text-sm font-light text-white"> {inscriptionsLength} / {collectionLength} minted</span>
                 </div>
                 <div className="text-white">
-                    Inscription ID: <InscriptionIdLink inscriptionId={collection?.collection_id ?? ''} isProd={true} />
+                    Collection ID: <InscriptionIdLink inscriptionId={collection?.collection_id ?? ''} isProd={true} />
                 </div>
                 <div className="text-white">
                     Mint Price: {collection?.price ? collection?.price + 'Sats' : 'Free'}
@@ -136,28 +138,34 @@ export default function Page({ params : {gameId} }: { params: { gameId: string }
             
         </div>
         <div className="w-full flex flex-col gap-4 mt-16">
-            <h1 className="text-4xl font-bold text-white">Minted Variations</h1>
-            <div className="gap-4 grid grid-cols-2 sm:grid-cols-4">
-            { isLoading
-             ? <Spinner />
-                : inscriptions.map((item, index) => (
-                <Card shadow="sm" key={index} className="bg-black">
-                <CardBody className="overflow-visible p-0">
-                    <Image
-                     width={250}
-                     height={250}
-                    alt={item.inscription_id}
-                    className="w-full object-cover"
-                    src={item.img_url}
-                    />
-                </CardBody>
-                <CardFooter className="text-small justify-start p-0 py-2">
-                    <Button size="sm" color="primary" variant="light" startContent={<Image src="/play.svg" alt="game icon" width={10} height={10} />} onClick={() => router.push(`/game/${gameId}/${item.inscription_id}`)}>
-                        Play
-                    </Button>
-                </CardFooter>
-                </Card>
-            ))}
+            <div className="flex flex-col items-center w-full min-h-screen bg-black p-4 sm:p-16">
+                <div className="flex gap-12 w-full flex-col sm:flex-row justify-between">
+                    <div className="w-full flex flex-col gap-4 mt-16">
+                        <h1 className="text-4xl font-bold text-white">My Inscriptions</h1>
+                        <div className="gap-4 grid grid-cols-2 sm:grid-cols-4">
+                        {
+                            !inscriptions?.length ? <div className="text-white"> No inscriptions yet</div> : inscriptions.map((item, index) => (
+                                <Card shadow="sm" key={index} className="bg-black">
+                                    <CardBody className="overflow-visible p-0">
+                                        <Image
+                                            width={250}
+                                            height={250}
+                                            alt={item.collection_id}
+                                            className="w-full object-cover"
+                                            src={`/game/${item.collection_id}.png`}
+                                        />
+                                    </CardBody>
+                                    <CardFooter className="text-small justify-start p-0 py-2">
+                                        <Button size="sm" color="primary" variant="light" startContent={<Image src="/play.svg" alt="game icon" width={10} height={10} />} onClick={() => router.push(`/game/${item.collection_id}/${item.inscription_id}`)}>
+                                            Play
+                                        </Button>
+                                    </CardFooter>
+                                </Card>
+                            ))
+                        }
+                    </div>
+                </div>
+            </div>
         </div>
         </div>
     </div>

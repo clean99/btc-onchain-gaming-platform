@@ -6,53 +6,9 @@ import { InscriptionIdLink } from "@/components/inscriptionid-link";
 export default function Page({ params }: { params: { gameId: string, variationId: string } }) {
     const gameHtml = useGameHtml(params.gameId, params.variationId);
     const iframeRef = useRef(null);
-    useEffect(() => {
-      const handleFocus = () => {
-          document.body.style.overflow = 'hidden';
-      };
-
-      const handleBlur = () => {
-          document.body.style.overflow = '';
-      };
-
-      const iframe = iframeRef.current;
-      if (iframe) {
-          // @ts-ignore
-          iframe.onload = () => {
-              // @ts-ignore
-              iframe.contentWindow.focus();
-          };
-          // @ts-ignore
-          iframe.contentWindow.addEventListener('focus', handleFocus);
-          // @ts-ignore
-          iframe.contentWindow.addEventListener('blur', handleBlur);
-      }
-
-      return () => {
-          if (iframe) {
-              // @ts-ignore
-              iframe.contentWindow.removeEventListener('focus', handleFocus);
-              // @ts-ignore
-              iframe.contentWindow.removeEventListener('blur', handleBlur);
-          }
-      };
-  }, [iframeRef.current]);
-
-
-  useEffect(() => {
-    // Focus the iframe to ensure it receives keyboard events
-    const iframe = iframeRef.current;
-    if (iframe) {
-        // @ts-ignore
-      iframe.onload = () => {
-        // @ts-ignore
-        iframe.contentWindow.focus();
-      };
-    }
-  }, []);
 
     return (
-        <div className="flex flex-col justify-center items-center w-full h-screen bg-black p-4 sm:p-12">
+        <div className="flex flex-col justify-center items-center w-ful bg-black p-4 sm:p-12" style={{ height: 'calc(100vh - 64px)' }}>
                 <div className="text-white text-2xl font-bold">
                     TxID: <InscriptionIdLink inscriptionId={params.variationId} />
                 </div>
